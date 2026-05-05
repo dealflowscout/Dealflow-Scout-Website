@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dealflow Scout — AI-Powered Deal Sourcing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0a0c10;
+  --ink2: #1e293b;
+  --body: #374151;
+  --muted: #6b7280;
+  --subtle: #9ca3af;
+  --border: #e5e7eb;
+  --border-light: #f1f5f9;
+  --bg: #ffffff;
+  --bg-soft: #f8fafc;
+  --bg-mid: #f1f5f9;
+  --hero-bg: #eaeaef;
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --green-light: #dcfce7;
+  --dark-bg: #080b12;
+  --dark-border: rgba(255,255,255,0.08);
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; color: var(--body); background: var(--bg); line-height: 1.6; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: 'Inter', sans-serif; }
+
+.container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--hero-bg);
+  height: 64px; display: flex; align-items: center;
+}
+.nav .container { display: flex; align-items: center; width: 100%; }
+
+.nav-logo { display: flex; align-items: center; gap: 9px; margin-right: 40px; flex-shrink: 0; }
+.nav-logo-mark { width: 32px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.brick-icon { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; width: 26px; height: 20px; }
+.brick-icon span { display: block; border-radius: 3px; background: #e8643a; }
+.brick-icon span:nth-child(2) { opacity: 0.85; }
+.brick-icon span:nth-child(3) { opacity: 0.7; }
+.brick-icon span:nth-child(4) { opacity: 0.55; }
+.nav-logo-text { font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; }
+
+.nav-menu { display: flex; align-items: center; gap: 0; flex: 1; }
+.nav-link {
+  display: flex; align-items: center; gap: 3px;
+  padding: 7px 14px; border-radius: 100px;
+  font-size: 14px; font-weight: 400; color: #444;
+  white-space: nowrap; transition: color 0.15s;
+}
+.nav-link:hover { color: var(--ink); }
+.nav-link.active { font-weight: 500; color: var(--ink); }
+.nav-link svg { width: 11px; height: 11px; color: #999; }
+
+.nav-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.btn-nav-login {
+  font-size: 14px; font-weight: 400; color: var(--ink);
+  padding: 8px 20px; border-radius: 100px;
+  background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.1);
+  transition: background 0.15s; white-space: nowrap;
+}
+.btn-nav-login:hover { background: rgba(255,255,255,0.9); }
+.btn-nav-demo {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 20px; background: var(--ink); color: #fff;
+  font-size: 14px; font-weight: 500; border-radius: 100px;
+  border: none; transition: opacity 0.15s; white-space: nowrap;
+}
+.btn-nav-demo:hover { opacity: 0.85; }
+
+/* dropdown */
+.nav-dropdown { position: relative; }
+.nav-dropdown:hover .dropdown-menu { display: block; }
+.dropdown-menu {
+  display: none; position: absolute; top: calc(100% + 8px); left: 0;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); min-width: 200px; padding: 6px; z-index: 200;
+}
+.dropdown-item { display: block; padding: 8px 12px; font-size: 14px; color: var(--ink2); border-radius: 6px; }
+.dropdown-item:hover { background: var(--bg-soft); color: var(--ink); }
+
+/* ─── HERO ─── */
+.hero { background: var(--hero-bg); padding: 100px 0 80px; }
+.hero .container { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.hero-h1 {
+  font-size: clamp(48px, 8vw, 110px);
+  font-weight: 800; line-height: 1.04; letter-spacing: -3px;
+  color: var(--ink); margin-bottom: 40px;
+}
+.hero-form {
+  display: flex; align-items: center;
+  background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 100px;
+  padding: 5px 5px 5px 22px; width: 460px; max-width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.hero-form input {
+  flex: 1; border: none; background: transparent;
+  font-size: 15px; font-family: 'Inter', sans-serif; color: var(--ink);
+  outline: none; min-width: 0;
+}
+.hero-form input::placeholder { color: #aaa; }
+.hero-form button {
+  flex-shrink: 0; padding: 10px 22px; background: var(--ink); color: #fff;
+  font-size: 14px; font-weight: 500; border: none; border-radius: 100px;
+  cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.15s; white-space: nowrap;
+}
+.hero-form button:hover { opacity: 0.82; }
+
+/* ─── TRUSTED BY ─── */
+.trusted { background: var(--hero-bg); padding: 40px 0 72px; }
+.trusted-label { font-size: 14px; font-weight: 400; color: #888; text-align: center; margin-bottom: 24px; }
+.logo-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
+.logo-item {
+  display: flex; align-items: center; justify-content: center;
+  height: 56px; padding: 0 24px; min-width: 130px;
+  background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+  font-size: 13px; font-weight: 600; color: #555; white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.logo-item:hover { background: #fff; color: var(--ink); }
+
+/* ─── SECTIONS ─── */
+section.section { padding: 80px 0; }
+.section-tag { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green-dark); margin-bottom: 14px; }
+.section-h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; letter-spacing: -1px; line-height: 1.15; color: var(--ink); margin-bottom: 16px; }
+.section-sub { font-size: 17px; font-weight: 400; color: var(--muted); line-height: 1.65; max-width: 560px; }
+
+/* ─── VALUE PROP ─── */
+.value-prop { background: var(--bg); padding: 88px 0; text-align: center; }
+.value-prop .section-h2 { max-width: 700px; margin: 0 auto 16px; font-size: clamp(28px, 4vw, 46px); }
+.value-prop .section-sub { margin: 0 auto; text-align: center; }
+
+/* ─── SOLUTIONS ─── */
+.solutions { background: var(--bg-soft); padding: 80px 0; }
+.solutions-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 48px; }
+.solution-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; cursor: pointer; }
+.solution-card:hover { box-shadow: var(--shadow); border-color: #d1d5db; }
+.solution-img { height: 160px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); }
+.solution-body { padding: 24px 28px; }
+.solution-body h3 { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+.solution-body p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+.solution-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--ink); transition: gap 0.2s; }
+.solution-link:hover { gap: 10px; }
+.solution-link svg { width: 14px; height: 14px; }
+.sol-vc .solution-img { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.sol-growth .solution-img { background: linear-gradient(135deg, #eff6ff, #dbeafe); }
+.sol-corp .solution-img { background: linear-gradient(135deg, #fdf4ff, #fae8ff); }
+.sol-gtm .solution-img { background: linear-gradient(135deg, #fff7ed, #fed7aa); }
+
+/* ─── SCOUT ─── */
+.scout { background: var(--bg); padding: 80px 0; }
+.scout-header { text-align: center; margin-bottom: 64px; }
+.scout-header .section-sub { margin: 0 auto; text-align: center; }
+.scout-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 56px; }
+.scout-step { padding: 32px 28px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg); transition: box-shadow 0.2s, border-color 0.2s; }
+.scout-step:hover { box-shadow: var(--shadow); border-color: #c8d0da; }
+.scout-step-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: var(--green-light); color: var(--green-dark); font-size: 12px; font-weight: 700; margin-bottom: 14px; }
+.scout-step h3 { font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px; }
+.scout-step p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+.scout-example { background: var(--bg-soft); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; font-style: italic; color: var(--muted); }
+
+.scout-chat-wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+.scout-chat-text h3 { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.4px; margin-bottom: 12px; }
+.scout-chat-text p { font-size: 15px; color: var(--muted); line-height: 1.65; }
+.scout-chat-mockup { background: #0d1117; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.08); box-shadow: var(--shadow-lg); overflow: hidden; }
+.chat-header { background: #161b22; padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.chat-title { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 500; }
+.chat-status { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+.chat-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+.chat-status-text { font-size: 11px; color: rgba(255,255,255,0.3); }
+.chat-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.chat-bubble-row { display: flex; gap: 10px; align-items: flex-start; }
+.chat-avatar { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+.chat-avatar.user { background: #2563eb; }
+.chat-avatar.ai { background: #16a34a; }
+.chat-text { padding: 9px 12px; border-radius: 9px; font-size: 12px; line-height: 1.55; font-family: 'Inter', sans-serif; max-width: 280px; }
+.chat-text.user { background: #1d4ed8; color: rgba(255,255,255,0.9); }
+.chat-text.ai { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.07); }
+.chat-text.ai strong { color: #4ade80; font-weight: 600; }
+.chat-results { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.14); border-radius: 8px; padding: 10px; margin-left: 36px; }
+.chat-result-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 11px; font-family: 'Inter', sans-serif; }
+.chat-result-row:last-child { border-bottom: none; }
+.cr-name { color: rgba(255,255,255,0.75); font-weight: 500; }
+.cr-meta { color: rgba(255,255,255,0.3); }
+.cr-tag { padding: 1px 6px; border-radius: 3px; background: rgba(34,197,94,0.15); color: #4ade80; font-weight: 600; font-size: 10px; }
+.chat-input-row { margin: 0 16px 16px; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 9px 12px; }
+.chat-input-text { flex: 1; font-size: 12px; color: rgba(255,255,255,0.25); font-family: 'Inter', sans-serif; }
+.chat-send { width: 26px; height: 26px; border-radius: 6px; background: var(--green-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.chat-send svg { width: 12px; height: 12px; fill: #fff; }
+.mockup-dots { display: flex; gap: 5px; }
+.mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-dot.r { background: #ff5f57; }
+.mockup-dot.y { background: #ffbd2e; }
+.mockup-dot.g { background: #28c840; }
+
+/* ─── BIG QUOTE ─── */
+.big-quote { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 64px 0; text-align: center; }
+.big-quote blockquote { font-size: clamp(20px, 3vw, 30px); font-weight: 700; color: var(--ink); letter-spacing: -0.5px; line-height: 1.35; max-width: 700px; margin: 0 auto 16px; }
+.big-quote cite { font-size: 15px; color: var(--muted); font-style: normal; }
+
+/* ─── FEATURE SECTIONS ─── */
+.feature-section { padding: 80px 0; }
+.feature-section.alt { background: var(--bg-soft); }
+.feature-section .container { display: flex; flex-direction: column; gap: 72px; }
+.feature-block { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.feature-block.reverse { direction: rtl; }
+.feature-block.reverse > * { direction: ltr; }
+.feature-block-text h4 { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.4px; margin-bottom: 10px; }
+.feature-block-text p { font-size: 15px; color: var(--muted); line-height: 1.65; margin-bottom: 20px; }
+.learn-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--ink); transition: gap 0.2s; }
+.learn-link:hover { gap: 10px; }
+.learn-link svg { width: 14px; height: 14px; }
+.feature-section-header { margin-bottom: 56px; }
+
+.feat-mockup { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; }
+.feat-mockup-header { background: var(--bg-soft); padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
+.feat-mock-dot { width: 8px; height: 8px; border-radius: 50%; }
+.feat-mock-dot.r { background: #fca5a5; }
+.feat-mock-dot.y { background: #fcd34d; }
+.feat-mock-dot.g { background: #86efac; }
+.feat-mockup-body { padding: 16px; }
+.mock-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.mock-chip { padding: 4px 10px; border: 1px solid var(--border); border-radius: 100px; font-size: 11px; font-weight: 500; color: var(--muted); }
+.mock-chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.feat-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border-light); }
+.feat-row:last-child { border-bottom: none; }
+.feat-row-logo { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.feat-row-info { flex: 1; }
+.feat-row-name { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.feat-row-sub { font-size: 11px; color: var(--muted); }
+.feat-row-badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.feat-row-badge.green { background: var(--green-light); color: var(--green-dark); }
+.feat-row-badge.blue { background: #dbeafe; color: #1d4ed8; }
+.feat-row-badge.purple { background: #fae8ff; color: #7e22ce; }
+.chrome-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; border-radius: var(--radius-sm); border: none; transition: background 0.15s; cursor: pointer; }
+.chrome-btn:hover { background: #1e293b; }
+
+/* ─── AGENT READY ─── */
+.agent-ready { background: var(--dark-bg); padding: 80px 0; position: relative; overflow: hidden; }
+.agent-ready::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.agent-ready .section-h2 { color: #fff; }
+.agent-ready .section-sub { color: rgba(255,255,255,0.5); }
+.agent-ready .section-tag { color: #4ade80; }
+.agent-ready-header { max-width: 580px; margin-bottom: 56px; position: relative; z-index: 1; }
+.agent-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; position: relative; z-index: 1; }
+.agent-card { background: rgba(255,255,255,0.03); border: 1px solid var(--dark-border); border-radius: var(--radius-lg); padding: 28px; transition: border-color 0.2s, background 0.2s; }
+.agent-card:hover { border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); }
+.agent-card-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 16px; }
+.agent-card h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.agent-card p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.65; margin-bottom: 14px; }
+.agent-link { font-size: 13px; font-weight: 500; color: #4ade80; display: inline-flex; align-items: center; gap: 5px; transition: gap 0.2s; }
+.agent-link:hover { gap: 9px; }
+.agent-link svg { width: 12px; height: 12px; }
+.agent-code { background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 12px; margin-top: 12px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.7; color: rgba(255,255,255,0.5); overflow-x: auto; }
+.agent-code .ck { color: #ff7b72; }
+.agent-code .cs { color: #a5d6ff; }
+
+/* ─── TESTIMONIALS ─── */
+.testimonials { background: var(--bg); padding: 80px 0; }
+.testimonials-header { margin-bottom: 52px; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.testi-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; transition: box-shadow 0.2s, border-color 0.2s; }
+.testi-card:hover { box-shadow: var(--shadow); border-color: #d1d5db; }
+.testi-quote-mark { font-size: 36px; color: var(--green); line-height: 1; margin-bottom: 12px; font-family: Georgia, serif; opacity: 0.6; }
+.testi-text { font-size: 15px; color: var(--body); line-height: 1.7; margin-bottom: 20px; }
+.testi-author { display: flex; align-items: center; gap: 10px; padding-top: 16px; border-top: 1px solid var(--border-light); }
+.testi-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.testi-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.testi-role { font-size: 12px; color: var(--muted); }
+
+/* ─── CASE STUDIES ─── */
+.case-studies { background: var(--bg-soft); padding: 80px 0; border-top: 1px solid var(--border); }
+.cs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+.cs-header-right { display: flex; align-items: center; gap: 12px; }
+.cs-more-link { font-size: 14px; font-weight: 500; color: var(--muted); display: flex; align-items: center; gap: 5px; transition: color 0.15s; }
+.cs-more-link:hover { color: var(--ink); }
+.cs-arrows { display: flex; gap: 8px; }
+.cs-arrow { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.15s; }
+.cs-arrow:hover { border-color: var(--ink2); }
+.cs-arrow svg { width: 14px; height: 14px; color: var(--ink2); }
+.cs-carousel-outer { overflow: hidden; }
+.cs-carousel { display: flex; gap: 20px; transition: transform 0.35s ease; }
+.cs-card { min-width: 320px; flex-shrink: 0; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: box-shadow 0.2s; }
+.cs-card:hover { box-shadow: var(--shadow); }
+.cs-card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 22px; border-bottom: 1px solid var(--border); }
+.cs-card-body { padding: 20px; }
+.cs-card-logo { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.cs-card-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+.cs-card-link { font-size: 13px; font-weight: 500; color: var(--ink); display: flex; align-items: center; gap: 5px; transition: gap 0.2s; }
+.cs-card-link:hover { gap: 9px; }
+.cs-bg-1 { background: linear-gradient(135deg, #fdf4ff, #ede9fe); }
+.cs-bg-2 { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); }
+.cs-bg-3 { background: linear-gradient(135deg, #fff7ed, #fef3c7); }
+.cs-bg-4 { background: linear-gradient(135deg, #f0fdf4, #dcfce7); }
+.cs-bg-5 { background: linear-gradient(135deg, #fdf2f8, #fce7f3); }
+.cs-bg-6 { background: linear-gradient(135deg, #f8fafc, #f1f5f9); }
+
+/* ─── HOT 25 ─── */
+.hot25 { background: var(--bg); padding: 80px 0; }
+.hot25-header { margin-bottom: 48px; }
+.hot25-tabs { display: flex; gap: 4px; background: var(--bg-mid); border-radius: 10px; padding: 4px; width: fit-content; margin-bottom: 36px; }
+.hot25-tab { padding: 7px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; border: none; background: none; font-family: 'Inter', sans-serif; transition: background 0.2s, color 0.2s; }
+.hot25-tab.active { background: var(--bg); color: var(--ink); box-shadow: var(--shadow-sm); }
+.hot25-tab:hover:not(.active) { color: var(--ink2); }
+.hot25-list { display: flex; flex-direction: column; max-width: 720px; }
+.hot25-row { display: flex; align-items: center; gap: 16px; border-radius: 8px; margin: 0 -12px; padding: 14px 12px; transition: background 0.1s; cursor: pointer; }
+.hot25-row:hover { background: var(--bg-soft); }
+.hot25-rank { font-size: 22px; font-weight: 800; color: var(--border); width: 40px; text-align: center; flex-shrink: 0; }
+.hot25-row:nth-child(1) .hot25-rank, .hot25-row:nth-child(2) .hot25-rank, .hot25-row:nth-child(3) .hot25-rank { color: var(--green-dark); }
+.hot25-logo-placeholder { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-mid); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+.hot25-info { flex: 1; }
+.hot25-name { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.hot25-sector { font-size: 13px; color: var(--muted); }
+.hot25-view-all { margin-top: 20px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--muted); transition: color 0.15s; }
+.hot25-view-all:hover { color: var(--ink); }
+.hot25-panel { display: none; }
+.hot25-panel.active { display: block; }
+
+/* ─── CTA ─── */
+.cta-section { background: var(--bg); padding: 80px 0; text-align: center; border-top: 1px solid var(--border); }
+.cta-section .section-h2 { max-width: 520px; margin: 0 auto 8px; }
+.cta-section .section-sub { margin: 0 auto 36px; text-align: center; }
+.cta-form { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; }
+.cta-form input { flex: 1; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
+.cta-form input:focus { border-color: var(--ink); }
+.cta-form input::placeholder { color: var(--subtle); }
+.btn-dark { display: inline-flex; align-items: center; gap: 6px; padding: 11px 20px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; border: none; border-radius: 100px; transition: opacity 0.15s; white-space: nowrap; cursor: pointer; }
+.btn-dark:hover { opacity: 0.82; }
+
+/* ─── FOOTER ─── */
+footer { background: #0a0c10; padding: 64px 0 32px; border-top: 1px solid rgba(255,255,255,0.06); }
+.footer-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 48px; margin-bottom: 56px; }
+.footer-brand-logo { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
+.footer-brand-name { font-size: 15px; font-weight: 700; color: #fff; }
+.footer-brand-desc { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.65; max-width: 240px; margin-bottom: 24px; }
+.footer-certs { display: flex; gap: 10px; }
+.footer-cert { padding: 5px 10px; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35); white-space: nowrap; }
+.footer-col h5 { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
+.footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 10px; transition: color 0.15s; }
+.footer-col a:hover { color: rgba(255,255,255,0.85); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.06); }
+.footer-copy { font-size: 13px; color: rgba(255,255,255,0.25); }
+.footer-legal { display: flex; gap: 20px; }
+.footer-legal a { font-size: 13px; color: rgba(255,255,255,0.3); transition: color 0.15s; }
+.footer-legal a:hover { color: rgba(255,255,255,0.6); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .scout-chat-wrap { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 768px) {
+  .nav-menu { display: none; }
+  .solutions-grid, .scout-steps, .agent-grid, .testimonials-grid { grid-template-columns: 1fr; }
+  .feature-block { grid-template-columns: 1fr; }
+  .feature-block.reverse { direction: ltr; }
+  .cs-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .hero-form { flex-direction: column; width: 100%; border-radius: 16px; padding: 12px; }
+  .hero-form button { width: 100%; justify-content: center; }
+  .cta-form { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">
+        <div class="brick-icon"><span></span><span></span><span></span><span></span></div>
+      </div>
+      <span class="nav-logo-text">Dealflow Scout</span>
+    </a>
+    <div class="nav-menu">
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item">Venture Capital</a>
+          <a href="#" class="dropdown-item">Growth Capital</a>
+          <a href="#" class="dropdown-item">Corporate Development</a>
+          <a href="#" class="dropdown-item">GTM</a>
+        </div>
+      </div>
+      <a href="#" class="nav-link">Customer stories</a>
+      <a href="#" class="nav-link">For founders</a>
+      <a href="#" class="nav-link active">Pricing</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Company <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item">About</a>
+          <a href="#" class="dropdown-item">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn-nav-login">Login</a>
+      <button class="btn-nav-demo">Book a demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-h1">The AI-powered deal sourcing engine</h1>
+    <div class="hero-form">
+      <input type="email" placeholder="Enter your work email">
+      <button type="submit">Book a demo</button>
+    </div>
+  </div>
+</section>
+
+<!-- TRUSTED BY -->
+<section class="trusted">
+  <div class="container">
+    <p class="trusted-label">Trusted by the best</p>
+    <div class="logo-row">
+      <span class="logo-item">Lightspeed</span>
+      <span class="logo-item">Khosla Ventures</span>
+      <span class="logo-item">Accel</span>
+      <span class="logo-item">NEA</span>
+      <span class="logo-item">Menlo Ventures</span>
+      <span class="logo-item">Bessemer</span>
+      <span class="logo-item">General Catalyst</span>
+      <span class="logo-item">First Round</span>
+      <span class="logo-item">Sequoia</span>
+      <span class="logo-item">Andreessen Horowitz</span>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PROP -->
+<section class="value-prop">
+  <div class="container">
+    <h2 class="section-h2">Dealflow Scout is the AI engine for your deal pipeline</h2>
+    <p class="section-sub">Automatically discovers, scores, and tracks early-stage startups against your investment thesis. Powered by Claude AI, updated daily across 7 data sources.</p>
+  </div>
+</section>
+
+<!-- SOLUTIONS -->
+<section class="solutions">
+  <div class="container">
+    <h2 class="section-h2">Solutions</h2>
+    <div class="solutions-grid">
+      <a href="#" class="solution-card sol-vc">
+        <div class="solution-img"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="font-size:36px;">📈</span><span style="font-size:13px;font-weight:600;color:#16a34a;">Venture Capital</span></div></div>
+        <div class="solution-body">
+          <h3>Venture Capital</h3>
+          <p>Discover the best opportunities before the competition. Surface breakout companies at the earliest signals.</p>
+          <span class="solution-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="solution-card sol-growth">
+        <div class="solution-img"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="font-size:36px;">🚀</span><span style="font-size:13px;font-weight:600;color:#1d4ed8;">Growth Capital</span></div></div>
+        <div class="solution-body">
+          <h3>Growth Capital</h3>
+          <p>Monitor trajectory and identify breakout companies at scale. Find your next investment before the herd.</p>
+          <span class="solution-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="solution-card sol-corp">
+        <div class="solution-img"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="font-size:36px;">🏢</span><span style="font-size:13px;font-weight:600;color:#7e22ce;">Corporate Development</span></div></div>
+        <div class="solution-body">
+          <h3>Corporate Development</h3>
+          <p>Map market movements and surface acquisition targets automatically. Stay ahead of strategic opportunities.</p>
+          <span class="solution-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></span>
+        </div>
+      </a>
+      <a href="#" class="solution-card sol-gtm">
+        <div class="solution-img"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><span style="font-size:36px;">🎯</span><span style="font-size:13px;font-weight:600;color:#c2410c;">GTM</span></div></div>
+        <div class="solution-body">
+          <h3>GTM</h3>
+          <p>Find prospects ready to buy. Use funding signals and hiring velocity to prioritize your best-fit accounts.</p>
+          <span class="solution-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SCOUT -->
+<section class="scout section">
+  <div class="container">
+    <div class="scout-header">
+      <span class="section-tag">Scout AI Agent</span>
+      <h2 class="section-h2">Meet Scout: The AI agent made for investors</h2>
+      <p class="section-sub">Scout maps markets, evaluates momentum, and understands intent. Ask it anything about the startup landscape.</p>
+    </div>
+    <div class="scout-steps">
+      <div class="scout-step">
+        <div class="scout-step-num">01</div>
+        <h3>Find</h3>
+        <p>Search the way you think. Scout maps markets, evaluates momentum and understands intent across 7 live data sources.</p>
+        <div class="scout-example">"Where are the opportunities in the AI infra stack?"</div>
+      </div>
+      <div class="scout-step">
+        <div class="scout-step-num">02</div>
+        <h3>Screen</h3>
+        <p>Research opportunities that match your thesis. Claude AI scores every startup and saves hours of manual diligence.</p>
+        <div class="scout-example">"Screen Series A companies with 50+ engineers and fast hiring"</div>
+      </div>
+      <div class="scout-step">
+        <div class="scout-step-num">03</div>
+        <h3>Act</h3>
+        <p>Scout prioritizes, drafts, and delivers. Personalized outreach via Gmail, Slack alerts, and CRM sync — all automated.</p>
+        <div class="scout-example">"Draft outreach to the top 5 founders from this list"</div>
+      </div>
+    </div>
+    <div class="scout-chat-wrap">
+      <div class="scout-chat-text">
+        <h3>From question to action in seconds</h3>
+        <p>Scout understands your investment thesis, remembers your preferences, and works across your entire deal pipeline. It's not just a chatbot — it's your always-on sourcing analyst.</p>
+      </div>
+      <div class="scout-chat-mockup">
+        <div class="chat-header">
+          <div class="mockup-dots"><span class="mockup-dot r"></span><span class="mockup-dot y"></span><span class="mockup-dot g"></span></div>
+          <span class="chat-title">Scout — AI Agent</span>
+          <div class="chat-status"><span class="chat-status-dot"></span><span class="chat-status-text">Online</span></div>
+        </div>
+        <div class="chat-body">
+          <div class="chat-bubble-row">
+            <div class="chat-avatar user">JR</div>
+            <div class="chat-text user">Find Series A fintech companies in LATAM with 50+ engineers</div>
+          </div>
+          <div class="chat-bubble-row">
+            <div class="chat-avatar ai">AI</div>
+            <div class="chat-text ai">Found <strong>18 companies</strong> matching your thesis. Top signals:</div>
+          </div>
+          <div class="chat-results">
+            <div class="chat-result-row"><span class="cr-name">Pomelo</span><span class="cr-meta">Buenos Aires · 120 eng</span><span class="cr-tag">🔥 Hot</span></div>
+            <div class="chat-result-row"><span class="cr-name">Addi</span><span class="cr-meta">Bogotá · 89 eng</span><span class="cr-tag">Rising</span></div>
+            <div class="chat-result-row"><span class="cr-name">Kushki</span><span class="cr-meta">Quito · 67 eng</span><span class="cr-tag">Active</span></div>
+          </div>
+          <div class="chat-bubble-row">
+            <div class="chat-avatar user">JR</div>
+            <div class="chat-text user">Draft intro emails for Pomelo and Addi founders</div>
+          </div>
+          <div class="chat-bubble-row">
+            <div class="chat-avatar ai">AI</div>
+            <div class="chat-text ai"><strong>2 drafts ready</strong> — personalized using funding news and product signals. Push to Gmail?</div>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <span class="chat-input-text">Ask Scout anything...</span>
+          <div class="chat-send"><svg viewBox="0 0 24 24"><path d="M2 12L22 2 12 22 10 13 2 12z"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIG QUOTE -->
+<section class="big-quote">
+  <div class="container">
+    <blockquote>"We found 4 out of our last 9 deals on Dealflow Scout"</blockquote>
+    <cite>— Tier 1 VC</cite>
+  </div>
+</section>
+
+<!-- DISCOVER -->
+<section class="feature-section">
+  <div class="container">
+    <div class="feature-section-header">
+      <span class="section-tag">Discover</span>
+      <h2 class="section-h2">Find the companies and people others miss</h2>
+    </div>
+    <div class="feature-block">
+      <div class="feature-block-text">
+        <h4>Find companies at the earliest signals</h4>
+        <p>Scrapes SEC EDGAR, Product Hunt, GitHub, YC, Techstars, 500 Global, and GDELT news daily. Surface opportunities months before they're widely known.</p>
+        <a href="#" class="learn-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="feat-mockup">
+        <div class="feat-mockup-header"><span class="feat-mock-dot r"></span><span class="feat-mock-dot y"></span><span class="feat-mock-dot g"></span></div>
+        <div class="feat-mockup-body">
+          <div class="mock-chips"><span class="mock-chip on">Series A–B</span><span class="mock-chip on">AI / ML</span><span class="mock-chip">Remote-first</span><span class="mock-chip on">↑ Hiring fast</span></div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#16a34a;">R</div><div class="feat-row-info"><div class="feat-row-name">Resolve AI</div><div class="feat-row-sub">AI Infrastructure · 142 employees</div></div><span class="feat-row-badge green">↑ 340%</span></div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#2563eb;">P</div><div class="feat-row-info"><div class="feat-row-name">Peec AI</div><div class="feat-row-sub">Developer Tools · 38 employees</div></div><span class="feat-row-badge blue">Series A</span></div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#7c3aed;">F</div><div class="feat-row-info"><div class="feat-row-name">Forge Climate</div><div class="feat-row-sub">Climate Tech · 24 employees</div></div><span class="feat-row-badge purple">Seed</span></div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#0891b2;">M</div><div class="feat-row-info"><div class="feat-row-name">Meridian Security</div><div class="feat-row-sub">Cybersecurity · 207 employees</div></div><span class="feat-row-badge green">↑ 180%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-block reverse" style="margin-top:64px;">
+      <div class="feature-block-text">
+        <h4>AI scoring against your thesis</h4>
+        <p>Claude AI scores every discovered startup against your investment thesis. Get a fit score, thesis match reasoning, and key signals — automatically, every day.</p>
+        <a href="#" class="learn-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="feat-mockup">
+        <div class="feat-mockup-header"><span class="feat-mock-dot r"></span><span class="feat-mock-dot y"></span><span class="feat-mock-dot g"></span></div>
+        <div class="feat-mockup-body">
+          <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:12px;">Thesis Match — Resolve AI</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:10px;background:var(--green-light);border-radius:8px;border:1px solid rgba(34,197,94,0.2);"><div style="font-size:11px;font-weight:600;color:var(--green-dark);margin-bottom:4px;">✓ Strong Thesis Match — 94/100</div><div style="font-size:11px;color:var(--green-dark);line-height:1.6;">AI infra, enterprise GTM, founding team from OpenAI</div></div>
+            <div style="padding:10px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border-light);"><div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:4px;">⚡ Key Signals</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">340% headcount growth · $12M raised · 3 ex-OpenAI hires</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section class="feature-section alt">
+  <div class="container">
+    <div class="feature-section-header">
+      <span class="section-tag">Research</span>
+      <h2 class="section-h2">The context you need to move with conviction</h2>
+    </div>
+    <div class="feature-block">
+      <div class="feature-block-text">
+        <h4>Agentic research reports</h4>
+        <p>Highlights from Dealflow Scout's proprietary data… and the entire web in one click. Generate full investment memos, competitive analyses, and founder profiles in minutes, not hours.</p>
+        <a href="#" class="learn-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="feat-mockup">
+        <div class="feat-mockup-header"><span class="feat-mock-dot r"></span><span class="feat-mock-dot y"></span><span class="feat-mock-dot g"></span></div>
+        <div class="feat-mockup-body">
+          <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:4px;">Resolve AI — Research Report</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Generated in 14 seconds · 8 sources</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:10px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border-light);"><div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:4px;">🏢 Company Overview</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">Series A · $12M raised · 142 employees · Founded 2023</div></div>
+            <div style="padding:10px;background:var(--green-light);border-radius:8px;border:1px solid rgba(34,197,94,0.2);"><div style="font-size:11px;font-weight:600;color:var(--green-dark);margin-bottom:4px;">✓ Thesis Match</div><div style="font-size:11px;color:var(--green-dark);line-height:1.6;">Strong match on AI infra, enterprise GTM, founding team quality</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-block reverse" style="margin-top:64px;">
+      <div class="feature-block-text">
+        <h4>Investor intelligence at your fingertips</h4>
+        <p>Search investors by stage, sector, geography, check size and investment activity. Know exactly who else is looking at a company — and who's likely to lead the round.</p>
+        <a href="#" class="learn-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="feat-mockup">
+        <div class="feat-mockup-header"><span class="feat-mock-dot r"></span><span class="feat-mock-dot y"></span><span class="feat-mock-dot g"></span></div>
+        <div class="feat-mockup-body">
+          <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:12px;">Investors tracking Resolve AI</div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#0f172a;">S</div><div class="feat-row-info"><div class="feat-row-name">Sequoia Capital</div><div class="feat-row-sub">Series A–C · AI / Infra focus</div></div><span class="feat-row-badge green">Active</span></div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#1d4ed8;">A</div><div class="feat-row-info"><div class="feat-row-name">Andreessen Horowitz</div><div class="feat-row-sub">Multi-stage · AI infrastructure</div></div><span class="feat-row-badge blue">Looking</span></div>
+          <div class="feat-row"><div class="feat-row-logo" style="background:#7c3aed;">K</div><div class="feat-row-info"><div class="feat-row-name">Khosla Ventures</div><div class="feat-row-sub">Seed–B · Deep tech, AI</div></div><span class="feat-row-badge purple">Tracking</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACT -->
+<section class="feature-section">
+  <div class="container">
+    <div class="feature-section-header">
+      <span class="section-tag">Act</span>
+      <h2 class="section-h2">From insight to outreach, without leaving Dealflow Scout</h2>
+    </div>
+    <div class="feature-block">
+      <div class="feature-block-text">
+        <h4>6-stage deal pipeline</h4>
+        <p>Track opportunities through Discovered → Reviewing → Meeting → Diligence → Term Sheet → Pass. Collaborate with your team, add notes, and monitor deal velocity — all in one place.</p>
+        <a href="#" class="learn-link">Learn more <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="feat-mockup">
+        <div class="feat-mockup-header"><span class="feat-mock-dot r"></span><span class="feat-mock-dot y"></span><span class="feat-mock-dot g"></span></div>
+        <div class="feat-mockup-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px;">Reviewing</div><div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:6px;"><div style="font-size:12px;font-weight:600;color:var(--ink);">Resolve AI</div><div style="font-size:11px;color:var(--muted);">Series A · AI</div></div><div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:10px;"><div style="font-size:12px;font-weight:600;color:var(--ink);">Peec AI</div><div style="font-size:11px;color:var(--muted);">Seed · Dev tools</div></div></div>
+          <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px;">Diligence</div><div style="background:var(--bg-soft);border:1px solid var(--border);border-radius:8px;padding:10px;"><div style="font-size:12px;font-weight:600;color:var(--ink);">Runlayer</div><div style="font-size:11px;color:var(--muted);">Series A · MLOps</div></div></div>
+          <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:8px;">Term Sheet</div><div style="background:var(--green-light);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:10px;"><div style="font-size:12px;font-weight:600;color:var(--green-dark);">Meridian Sec</div><div style="font-size:11px;color:var(--green-dark);">Series B · Security</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-block reverse" style="margin-top:64px;">
+      <div class="feature-block-text">
+        <h4>Personalized outreach via Gmail</h4>
+        <p>Send personalized outreach emails crafted by Claude AI directly from Dealflow Scout. Track open and reply rates, get Slack alerts on responses, and schedule Google Meet calls with one click.</p>
+        <button class="chrome-btn" style="margin-top:8px;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><circle cx="12" cy="12" r="4" fill="white"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+          Download Chrome Extension
+        </button>
+      </div>
+      <div class="feat-mockup">
+        <div class="feat-mockup-header"><span class="feat-mock-dot r"></span><span class="feat-mock-dot y"></span><span class="feat-mock-dot g"></span></div>
+        <div class="feat-mockup-body">
+          <div style="background:var(--green-light);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+              <div style="width:20px;height:20px;background:var(--green-dark);border-radius:4px;display:flex;align-items:center;justify-content:center;"><div class="brick-icon" style="width:12px;height:10px;gap:1.5px;"><span style="border-radius:2px;"></span><span style="border-radius:2px;opacity:.85;"></span><span style="border-radius:2px;opacity:.7;"></span><span style="border-radius:2px;opacity:.55;"></span></div></div>
+              <span style="font-size:12px;font-weight:700;color:var(--green-dark);">Dealflow Scout Insights</span>
+            </div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;">Sarah Jensen</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Stealth startup · Ex-Stripe · Stanford MBA</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="padding:3px 8px;background:#fff;border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:600;color:var(--ink);">2x Founder</span>
+              <span style="padding:3px 8px;background:#fff;border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:600;color:var(--ink);">Likely raising</span>
+              <span style="padding:3px 8px;background:var(--green-light);border:1px solid rgba(34,197,94,0.2);border-radius:4px;font-size:10px;font-weight:600;color:var(--green-dark);">In your network</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT READY -->
+<section class="agent-ready">
+  <div class="container">
+    <div class="agent-ready-header">
+      <span class="section-tag">Agent-ready</span>
+      <h2 class="section-h2">Live data on companies, founders, and investors — without leaving your workflow</h2>
+      <p class="section-sub">Dealflow Scout intelligence in every tool you already use. Built for developers, designed for everyone.</p>
+    </div>
+    <div class="agent-grid">
+      <div class="agent-card">
+        <div class="agent-card-icon">🔧</div>
+        <h3>Purpose-built MCP</h3>
+        <p>Dealflow Scout intelligence in every conversation with your AI. Connect to Claude, GPT, and any MCP-compatible model with one config.</p>
+        <div class="agent-code">
+<span class="ck">"dealflow-scout"</span>: {<br>
+&nbsp;&nbsp;<span class="cs">"command"</span>: <span class="ck">"npx"</span>,<br>
+&nbsp;&nbsp;<span class="cs">"args"</span>: [<span class="ck">"@dealflow-scout/mcp"</span>]<br>
+}
+        </div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-card-icon">⚙️</div>
+        <h3>Zapier &amp; n8n automations</h3>
+        <p>Zapier and n8n bots can keep your workflow up to date with the latest data. Auto-add new ICP matches to your CRM, trigger Slack alerts, and more.</p>
+        <a href="#" class="agent-link">Explore integrations <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="agent-card">
+        <div class="agent-card-icon">📦</div>
+        <h3>Bulk data for optimal flexibility</h3>
+        <p>The complete startup database delivered directly to your data warehouse or cloud. Snowflake, BigQuery, Databricks — your choice.</p>
+        <a href="#" class="agent-link">Learn about data exports <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="agent-card">
+        <div class="agent-card-icon">🔌</div>
+        <h3>Dealflow Scout API</h3>
+        <p>Always up to date, always production ready and tailored to your integration. GraphQL and REST, with comprehensive documentation.</p>
+        <a href="#" class="agent-link">Read the Docs <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <h2 class="section-h2">Visionary investors run on Dealflow Scout</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card"><div class="testi-quote-mark">"</div><p class="testi-text">Dealflow Scout instantly turned Floodgate into a data-driven firm. Its automated tools have become fundamental to our sourcing and networking efforts.</p><div class="testi-author"><div class="testi-avatar" style="background:#0f172a;">MM</div><div><div class="testi-name">Mike Maples</div><div class="testi-role">Co-founding Partner, Floodgate</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote-mark">"</div><p class="testi-text">The Dealflow Scout platform has decisively enhanced my productivity. Finding companies I'd otherwise never encounter is now just part of the workflow.</p><div class="testi-author"><div class="testi-avatar" style="background:#1d4ed8;">BC</div><div><div class="testi-name">Brian Cashin</div><div class="testi-role">VP, Teamworthy</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote-mark">"</div><p class="testi-text">We found 4 out of our last 9 deals on Dealflow Scout. The signal quality is unlike anything else in market — it's our most important sourcing tool by far.</p><div class="testi-author"><div class="testi-avatar" style="background:#16a34a;">T1</div><div><div class="testi-name">Partner</div><div class="testi-role">Tier 1 Venture Capital</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote-mark">"</div><p class="testi-text">Dealflow Scout has fundamentally changed how we approach sourcing. The depth of data and quality of signals means we spend less time searching and more time building conviction.</p><div class="testi-author"><div class="testi-avatar" style="background:#7c3aed;">BK</div><div><div class="testi-name">Ben Kany</div><div class="testi-role">Partner, Bedrock</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote-mark">"</div><p class="testi-text">As a fintech investor, finding the right founders at the right time is everything. Dealflow Scout's momentum data consistently surfaces the best opportunities months early.</p><div class="testi-author"><div class="testi-avatar" style="background:#0891b2;">FW</div><div><div class="testi-name">Fan Wen</div><div class="testi-role">Partner, Fin Capital</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote-mark">"</div><p class="testi-text">I've tried every sourcing tool on the market. Dealflow Scout is the only one that truly surfaces companies I'd never find otherwise. It's become indispensable to my process.</p><div class="testi-author"><div class="testi-avatar" style="background:#dc2626;">ZR</div><div><div class="testi-name">Zain Rizavi</div><div class="testi-role">Partner, Ridge Ventures</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section class="case-studies">
+  <div class="container">
+    <div class="cs-header">
+      <h2 class="section-h2" style="margin-bottom:0;">Meet the companies leveling up with Dealflow Scout</h2>
+      <div class="cs-header-right">
+        <a href="#" class="cs-more-link">Read more stories <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+        <div class="cs-arrows">
+          <button class="cs-arrow" onclick="slideCarousel(-1)"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L4 7l5 5"/></svg></button>
+          <button class="cs-arrow" onclick="slideCarousel(1)"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 2l5 5-5 5"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="cs-carousel-outer">
+      <div class="cs-carousel" id="cs-carousel">
+        <div class="cs-card"><div class="cs-card-img cs-bg-1">🦔</div><div class="cs-card-body"><div class="cs-card-logo">PostHog</div><p class="cs-card-desc">PostHog turns startup momentum into a retention advantage with Dealflow Scout</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img cs-bg-2">⚛️</div><div class="cs-card-body"><div class="cs-card-logo">Quantum Talent</div><p class="cs-card-desc">Recruiting at startup speed: How Quantum turns market data into hiring power</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img cs-bg-3">🏔️</div><div class="cs-card-body"><div class="cs-card-logo">Sorenson Capital</div><p class="cs-card-desc">How Sorenson Capital finds top-performing deals with Dealflow Scout's signals</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img cs-bg-4">🌳</div><div class="cs-card-body"><div class="cs-card-logo">Airtree Ventures</div><p class="cs-card-desc">Airtree uses Dealflow Scout to source the best Australian and global startups</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img cs-bg-5">🔺</div><div class="cs-card-body"><div class="cs-card-logo">Antler</div><p class="cs-card-desc">Antler scales global founder sourcing with Dealflow Scout's startup intelligence</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img cs-bg-6">🌍</div><div class="cs-card-body"><div class="cs-card-logo">NGP Capital</div><p class="cs-card-desc">NGP Capital discovers global B2B opportunities faster using Dealflow Scout</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img" style="background:linear-gradient(135deg,#f0f9ff,#bae6fd);">🐦</div><div class="cs-card-body"><div class="cs-card-logo">Flybridge</div><p class="cs-card-desc">Flybridge builds proprietary deal flow with Dealflow Scout's real-time startup signals</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+        <div class="cs-card"><div class="cs-card-img" style="background:linear-gradient(135deg,#fff1f2,#fecdd3);">🍐</div><div class="cs-card-body"><div class="cs-card-logo">Pear VC</div><p class="cs-card-desc">Pear VC leverages Dealflow Scout to identify pre-seed founders before anyone else</p><a href="#" class="cs-card-link">Read the story <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOT 25 -->
+<section class="hot25">
+  <div class="container">
+    <div class="hot25-header">
+      <h2 class="section-h2">Dealflow Scout Hot 25 Startups™</h2>
+      <p class="section-sub">The hottest startups based on aggregated interest from the thousands of investors using Dealflow Scout.</p>
+    </div>
+    <div class="hot25-tabs">
+      <button class="hot25-tab active" onclick="switchHot25(this,'q2-2026')">Q2 2026</button>
+      <button class="hot25-tab" onclick="switchHot25(this,'q1-2026')">Q1 2026</button>
+      <button class="hot25-tab" onclick="switchHot25(this,'q4-2025')">Q4 2025</button>
+    </div>
+    <div id="q2-2026" class="hot25-panel active">
+      <div class="hot25-list">
+        <div class="hot25-row"><span class="hot25-rank">1</span><div class="hot25-logo-placeholder">R</div><div class="hot25-info"><div class="hot25-name">Resolve AI</div><div class="hot25-sector">AI Infrastructure · San Francisco</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">2</span><div class="hot25-logo-placeholder">P</div><div class="hot25-info"><div class="hot25-name">Peec AI</div><div class="hot25-sector">Developer Tools · New York</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">3</span><div class="hot25-logo-placeholder">R</div><div class="hot25-info"><div class="hot25-name">Runlayer</div><div class="hot25-sector">MLOps · Austin</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">4</span><div class="hot25-logo-placeholder">V</div><div class="hot25-info"><div class="hot25-name">Vantage Protocol</div><div class="hot25-sector">Fintech · London</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">5</span><div class="hot25-logo-placeholder">S</div><div class="hot25-info"><div class="hot25-name">Synthos Bio</div><div class="hot25-sector">Biotech · Boston</div></div></div>
+      </div>
+      <a href="#" class="hot25-view-all">View all 25 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+    </div>
+    <div id="q1-2026" class="hot25-panel">
+      <div class="hot25-list">
+        <div class="hot25-row"><span class="hot25-rank">1</span><div class="hot25-logo-placeholder">S</div><div class="hot25-info"><div class="hot25-name">Serval</div><div class="hot25-sector">AI Agents · San Francisco</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">2</span><div class="hot25-logo-placeholder">P</div><div class="hot25-info"><div class="hot25-name">Peec AI</div><div class="hot25-sector">Developer Tools · New York</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">3</span><div class="hot25-logo-placeholder">R</div><div class="hot25-info"><div class="hot25-name">Resolve AI</div><div class="hot25-sector">AI Infrastructure · San Francisco</div></div></div>
+      </div>
+      <a href="#" class="hot25-view-all">View all 25 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+    </div>
+    <div id="q4-2025" class="hot25-panel">
+      <div class="hot25-list">
+        <div class="hot25-row"><span class="hot25-rank">1</span><div class="hot25-logo-placeholder">L</div><div class="hot25-info"><div class="hot25-name">Lovable</div><div class="hot25-sector">AI Coding · Stockholm</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">2</span><div class="hot25-logo-placeholder">R</div><div class="hot25-info"><div class="hot25-name">Retell AI</div><div class="hot25-sector">Voice AI · San Francisco</div></div></div>
+        <div class="hot25-row"><span class="hot25-rank">3</span><div class="hot25-logo-placeholder">P</div><div class="hot25-info"><div class="hot25-name">Peec AI</div><div class="hot25-sector">Developer Tools · New York</div></div></div>
+      </div>
+      <a href="#" class="hot25-view-all">View all 25 <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-h2">Try Dealflow Scout</h2>
+    <p class="section-sub">Schedule your demo today</p>
+    <div class="cta-form">
+      <input type="email" placeholder="Email address">
+      <button class="btn-dark">Submit <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <div class="nav-logo-mark"><div class="brick-icon" style="filter:brightness(1.8);"><span></span><span></span><span></span><span></span></div></div>
+          <span class="footer-brand-name">Dealflow Scout</span>
+        </div>
+        <p class="footer-brand-desc">AI-powered deal sourcing for VC firms. Automatically discovers, scores, and tracks early-stage startups.</p>
+        <div class="footer-certs">
+          <span class="footer-cert">SOC 2 Type II</span>
+          <span class="footer-cert">ISO 27001</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Team</a>
+        <a href="#">Submit your startup</a>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <a href="#">Pricing</a>
+        <a href="#">Blog</a>
+        <a href="#">API documentation</a>
+        <a href="#">Support</a>
+      </div>
+      <div class="footer-col">
+        <h5>Case Studies</h5>
+        <a href="#">Valo Ventures</a>
+        <a href="#">Bedrock</a>
+        <a href="#">MVP Ventures</a>
+        <a href="#">Ridge Ventures</a>
+        <a href="#">View all →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">All rights reserved © 2026 Dealflow Scout</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+let carouselPos = 0;
+function slideCarousel(dir) {
+  const track = document.getElementById('cs-carousel');
+  carouselPos = Math.max(0, Math.min(carouselPos + dir, track.children.length - 3));
+  track.style.transform = `translateX(-${carouselPos * 340}px)`;
+}
+function switchHot25(btn, id) {
+  document.querySelectorAll('.hot25-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.hot25-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.testi-card,.solution-card,.scout-step,.agent-card').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(20px)'; el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>
