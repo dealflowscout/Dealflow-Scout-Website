@@ -180,12 +180,11 @@
     <a href="index.html" class="nav-logo">
       <span class="nav-logo-text">Dealflow Scout</span>
     </a>
-        <div class="nav-menu">
+            <div class="nav-menu">
       <a href="customer-stories.html" class="nav-link">Customer stories</a>
       <a href="for-founders.html" class="nav-link active">For founders</a>
       <a href="pricing.html" class="nav-link">Pricing</a>
       <a href="about.html" class="nav-link">About</a>
-      <a href="careers.html" class="nav-link">Careers</a>
     </div>
     <div class="nav-actions">
       <a href="https://deal-flow-scout-one.vercel.app/login" target="_blank" class="btn-nav-login">Login</a>
@@ -202,7 +201,7 @@
     <p class="hero-sub">Dealflow Scout is how the world's best VC firms find startups like yours. Submit your company and get in front of investors actively looking for what you're building.</p>
     <div class="hero-form">
       <input type="text" placeholder="Your startup name or website">
-      <button type="submit">Submit your startup</button>
+      <button type="button" class="js-open-founder">Submit your startup</button>
     </div>
   </div>
 </section>
@@ -530,6 +529,65 @@ document.querySelectorAll('.founder-feat-card, .signal-item').forEach(el => {
         <div style="font-size:40px; margin-bottom:12px;">&#127881;</div>
         <h3 style="font-size:20px; font-weight:700; color:var(--ink); margin-bottom:8px;">Request received!</h3>
         <p style="color:var(--muted); font-size:14px; line-height:1.6;">We'll reach out within 24 hours with a calendar invite. Looking forward to it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FOUNDER SUBMISSION MODAL -->
+<div class="modal-overlay" id="founderModal">
+  <div class="modal-card">
+    <button class="modal-close" id="founderModalClose">&times;</button>
+    <div class="modal-body">
+      <div class="modal-icon">&#128640;</div>
+      <h2 class="modal-title">Submit your startup</h2>
+      <p class="modal-sub">Free to submit. Live on Dealflow Scout within 24 hours. No equity taken.</p>
+      <form id="founderModalForm" novalidate>
+        <div class="modal-field">
+          <label class="modal-label">Company name</label>
+          <input class="modal-input" type="text" name="company" placeholder="e.g. Resolve AI" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Website</label>
+          <input class="modal-input" type="url" name="website" placeholder="https://yourcompany.com">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">One-line description</label>
+          <input class="modal-input" type="text" name="description" placeholder="What does your company do?">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="modal-field">
+            <label class="modal-label">Stage</label>
+            <select class="modal-input" name="stage">
+              <option>Pre-seed</option>
+              <option>Seed</option>
+              <option>Series A</option>
+              <option>Series B+</option>
+            </select>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">Sector</label>
+            <select class="modal-input" name="sector">
+              <option>AI / ML</option>
+              <option>Fintech</option>
+              <option>Climate Tech</option>
+              <option>Health Tech</option>
+              <option>SaaS / B2B</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Founder email</label>
+          <input class="modal-input" type="email" name="email" placeholder="you@yourcompany.com" required>
+        </div>
+        <button type="submit" class="modal-submit" id="founderModalSubmit">Submit my startup &rarr;</button>
+      </form>
+      <div id="founderModalSuccess" style="display:none; text-align:center; padding:20px 0 4px;">
+        <div style="font-size:40px; margin-bottom:12px;">&#127881;</div>
+        <h3 style="font-size:20px; font-weight:700; color:var(--ink); margin-bottom:8px;">You're in!</h3>
+        <p style="color:var(--muted); font-size:14px; line-height:1.6;">We've received your submission. Your startup will be live on Dealflow Scout within 24 hours.</p>
       </div>
     </div>
   </div>

@@ -94,7 +94,85 @@ if (modalForm) {
   });
 }
 
-// ─── For-founders Submission Form ───
+// ─── Founder Submission Modal ───
+var founderModal = document.getElementById('founderModal');
+var founderModalForm = document.getElementById('founderModalForm');
+var founderModalSuccess = document.getElementById('founderModalSuccess');
+var founderModalSubmit = document.getElementById('founderModalSubmit');
+
+function openFounderModal() {
+  if (!founderModal) return;
+  founderModal.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFounderModal() {
+  if (!founderModal) return;
+  founderModal.classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+
+if (founderModal) {
+  document.querySelectorAll('.js-open-founder').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      openFounderModal();
+    });
+  });
+
+  var founderModalClose = document.getElementById('founderModalClose');
+  if (founderModalClose) founderModalClose.addEventListener('click', closeFounderModal);
+
+  founderModal.addEventListener('click', function(e) {
+    if (e.target === founderModal) closeFounderModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeFounderModal();
+  });
+}
+
+if (founderModalForm) {
+  founderModalForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var company = founderModalForm.querySelector('[name="company"]').value.trim();
+    var website = founderModalForm.querySelector('[name="website"]').value.trim();
+    var description = founderModalForm.querySelector('[name="description"]').value.trim();
+    var stage = founderModalForm.querySelector('[name="stage"]').value;
+    var sector = founderModalForm.querySelector('[name="sector"]').value;
+    var email = founderModalForm.querySelector('[name="email"]').value.trim();
+
+    if (!company || !email) {
+      founderModalForm.querySelector('[name="' + (!company ? 'company' : 'email') + '"]').focus();
+      return;
+    }
+
+    founderModalSubmit.textContent = 'Submitting…';
+    founderModalSubmit.disabled = true;
+
+    fetch('/api/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'founder', company: company, website: website, description: description, stage: stage, sector: sector, email: email }),
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          founderModalForm.style.display = 'none';
+          if (founderModalSuccess) founderModalSuccess.style.display = 'block';
+        } else {
+          founderModalSubmit.textContent = 'Try again';
+          founderModalSubmit.disabled = false;
+        }
+      })
+      .catch(function() {
+        founderModalSubmit.textContent = 'Try again';
+        founderModalSubmit.disabled = false;
+      });
+  });
+}
+
+// ─── For-founders Submission Form (bottom page form) ───
 var founderForm = document.getElementById('founderForm');
 if (founderForm) {
   var founderSubmitBtn = founderForm.querySelector('.form-submit');
