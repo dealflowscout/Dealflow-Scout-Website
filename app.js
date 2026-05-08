@@ -24,6 +24,24 @@
   els.forEach(function(el) { io.observe(el); });
 })();
 
+// ─── Shared form submit (FormSubmit AJAX) ───
+function submitForm(payload, onSuccess, onError) {
+  fetch('https://formsubmit.co/ajax/dealflowscout@gmail.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success === 'true' || data.success === true) {
+        onSuccess();
+      } else {
+        onError();
+      }
+    })
+    .catch(function() { onError(); });
+}
+
 // ─── Demo Modal ───
 var modal = document.getElementById('demoModal');
 var modalForm = document.getElementById('demoModalForm');
@@ -54,7 +72,6 @@ if (modal) {
     });
   });
 
-  // Hero/CTA email forms — pre-fill email in modal
   document.querySelectorAll('.hero-form, .cta-form').forEach(function(form) {
     var emailInput = form.querySelector('input[type="email"]');
     var trigger = form.querySelector('.js-open-demo');
@@ -94,25 +111,23 @@ if (modalForm) {
     modalSubmit.textContent = 'Sending…';
     modalSubmit.disabled = true;
 
-    fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'demo', name: name, email: email, firm: firm, message: message }),
-    })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.success) {
-          modalForm.style.display = 'none';
-          if (modalSuccess) modalSuccess.style.display = 'block';
-        } else {
-          modalSubmit.textContent = 'Try again';
-          modalSubmit.disabled = false;
-        }
-      })
-      .catch(function() {
+    submitForm(
+      {
+        _subject: 'New Demo Request — ' + name,
+        Name: name,
+        Email: email,
+        Firm: firm || '—',
+        Message: message || '—',
+      },
+      function() {
+        modalForm.style.display = 'none';
+        if (modalSuccess) modalSuccess.style.display = 'block';
+      },
+      function() {
         modalSubmit.textContent = 'Try again';
         modalSubmit.disabled = false;
-      });
+      }
+    );
   });
 }
 
@@ -172,25 +187,25 @@ if (founderModalForm) {
     founderModalSubmit.textContent = 'Submitting…';
     founderModalSubmit.disabled = true;
 
-    fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'founder', company: company, website: website, description: description, stage: stage, sector: sector, email: email }),
-    })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.success) {
-          founderModalForm.style.display = 'none';
-          if (founderModalSuccess) founderModalSuccess.style.display = 'block';
-        } else {
-          founderModalSubmit.textContent = 'Try again';
-          founderModalSubmit.disabled = false;
-        }
-      })
-      .catch(function() {
+    submitForm(
+      {
+        _subject: 'New Startup Submission — ' + company,
+        Company: company,
+        Website: website || '—',
+        Description: description || '—',
+        Stage: stage || '—',
+        Sector: sector || '—',
+        'Founder Email': email,
+      },
+      function() {
+        founderModalForm.style.display = 'none';
+        if (founderModalSuccess) founderModalSuccess.style.display = 'block';
+      },
+      function() {
         founderModalSubmit.textContent = 'Try again';
         founderModalSubmit.disabled = false;
-      });
+      }
+    );
   });
 }
 
@@ -214,35 +229,31 @@ if (founderForm) {
       return;
     }
 
-    founderSubmitBtn.textContent = 'Submitting…';
-    founderSubmitBtn.disabled = true;
+    if (founderSubmitBtn) {
+      founderSubmitBtn.textContent = 'Submitting…';
+      founderSubmitBtn.disabled = true;
+    }
 
-    fetch('/api/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'founder',
-        company: company,
-        website: website,
-        description: description,
-        stage: stage,
-        sector: sector,
-        email: email,
-      }),
-    })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.success) {
-          founderForm.style.display = 'none';
-          if (founderSuccess) founderSuccess.style.display = 'block';
-        } else {
+    submitForm(
+      {
+        _subject: 'New Startup Submission — ' + company,
+        Company: company,
+        Website: website || '—',
+        Description: description || '—',
+        Stage: stage || '—',
+        Sector: sector || '—',
+        'Founder Email': email,
+      },
+      function() {
+        founderForm.style.display = 'none';
+        if (founderSuccess) founderSuccess.style.display = 'block';
+      },
+      function() {
+        if (founderSubmitBtn) {
           founderSubmitBtn.textContent = 'Try again';
           founderSubmitBtn.disabled = false;
         }
-      })
-      .catch(function() {
-        founderSubmitBtn.textContent = 'Try again';
-        founderSubmitBtn.disabled = false;
-      });
+      }
+    );
   });
 }
