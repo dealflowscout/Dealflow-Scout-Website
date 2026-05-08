@@ -1,0 +1,94 @@
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const body = req.body;
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) return res.status(500).json({ error: 'Server misconfiguration' });
+
+  let subject, html;
+
+  if (body.type === 'demo') {
+    subject = `New Demo Request — ${body.email}`;
+    html = `
+      <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;">
+        <h2 style="color:#0a1f4e;margin-bottom:8px;">New Demo Request</h2>
+        <p style="color:#666;margin-top:0;">Someone booked a demo via the Dealflow Scout website.</p>
+        <table style="width:100%;border-collapse:collapse;margin-top:24px;">
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;width:140px;">Email</td>
+            <td style="padding:12px 0;color:#333;">${body.email}</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Source</td>
+            <td style="padding:12px 0;color:#333;">${body.source || 'Website'}</td>
+          </tr>
+        </table>
+      </div>
+    `;
+  } else if (body.type === 'founder') {
+    subject = `New Startup Submission — ${body.company || 'Unknown'}`;
+    html = `
+      <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;">
+        <h2 style="color:#0a1f4e;margin-bottom:8px;">New Startup Submission</h2>
+        <p style="color:#666;margin-top:0;">A founder submitted their startup via the Dealflow Scout website.</p>
+        <table style="width:100%;border-collapse:collapse;margin-top:24px;">
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;width:160px;">Company</td>
+            <td style="padding:12px 0;color:#333;">${body.company || '—'}</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Website</td>
+            <td style="padding:12px 0;color:#333;">${body.website ? `<a href="${body.website}">${body.website}</a>` : '—'}</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Description</td>
+            <td style="padding:12px 0;color:#333;">${body.description || '—'}</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Stage</td>
+            <td style="padding:12px 0;color:#333;">${body.stage || '—'}</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Sector</td>
+            <td style="padding:12px 0;color:#333;">${body.sector || '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Founder Email</td>
+            <td style="padding:12px 0;color:#333;">${body.email || '—'}</td>
+          </tr>
+        </table>
+      </div>
+    `;
+  } else {
+    return res.status(400).json({ error: 'Unknown form type' });
+  }
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Dealflow Scout <onboarding@resend.dev>',
+        to: ['dealflowscout@gmail.com'],
+        subject,
+        html,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) return res.status(500).json({ error: data.message || 'Failed to send' });
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}

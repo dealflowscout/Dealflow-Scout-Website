@@ -205,8 +205,8 @@
       </div>
     </div>
     <div class="nav-actions">
-      <a href="#" class="btn-nav-login">Login</a>
-      <button class="btn-nav-demo">Book a demo</button>
+      <a href="https://deal-flow-scout-one.vercel.app/login" target="_blank" class="btn-nav-login">Login</a>
+      <a href="https://calendly.com/d/ct7j-wbh-rrn/dealflow-scout-by-ssanz-demo-call?month=2026-05" target="_blank" class="btn-nav-demo">Book a demo</a>
     </div>
   </div>
 </nav>
@@ -406,46 +406,53 @@
         </div>
       </div>
       <div class="submit-form-card">
-        <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:24px;">Tell us about your startup</div>
-        <div class="form-field">
-          <label class="form-label">Company name</label>
-          <input class="form-input" type="text" placeholder="e.g. Resolve AI">
-        </div>
-        <div class="form-field">
-          <label class="form-label">Website</label>
-          <input class="form-input" type="url" placeholder="https://yourcompany.com">
-        </div>
-        <div class="form-field">
-          <label class="form-label">One-line description</label>
-          <input class="form-input" type="text" placeholder="What does your company do?">
-        </div>
-        <div class="form-grid">
+        <form id="founderForm">
+          <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:24px;">Tell us about your startup</div>
           <div class="form-field">
-            <label class="form-label">Stage</label>
-            <select class="form-select">
-              <option>Pre-seed</option>
-              <option>Seed</option>
-              <option>Series A</option>
-              <option>Series B+</option>
-            </select>
+            <label class="form-label">Company name</label>
+            <input class="form-input" type="text" name="company" placeholder="e.g. Resolve AI" required>
           </div>
           <div class="form-field">
-            <label class="form-label">Sector</label>
-            <select class="form-select">
-              <option>AI / ML</option>
-              <option>Fintech</option>
-              <option>Climate Tech</option>
-              <option>Health Tech</option>
-              <option>SaaS / B2B</option>
-              <option>Other</option>
-            </select>
+            <label class="form-label">Website</label>
+            <input class="form-input" type="url" name="website" placeholder="https://yourcompany.com">
           </div>
+          <div class="form-field">
+            <label class="form-label">One-line description</label>
+            <input class="form-input" type="text" name="description" placeholder="What does your company do?">
+          </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label class="form-label">Stage</label>
+              <select class="form-select" name="stage">
+                <option>Pre-seed</option>
+                <option>Seed</option>
+                <option>Series A</option>
+                <option>Series B+</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Sector</label>
+              <select class="form-select" name="sector">
+                <option>AI / ML</option>
+                <option>Fintech</option>
+                <option>Climate Tech</option>
+                <option>Health Tech</option>
+                <option>SaaS / B2B</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Founder email</label>
+            <input class="form-input" type="email" name="email" placeholder="you@yourcompany.com" required>
+          </div>
+          <button type="submit" class="form-submit">Submit my startup →</button>
+        </form>
+        <div id="founderSuccess" style="display:none; text-align:center; padding:40px 0;">
+          <div style="font-size:40px; margin-bottom:16px;">🎉</div>
+          <div style="font-size:18px; font-weight:700; color:#fff; margin-bottom:8px;">You're in!</div>
+          <p style="color:rgba(255,255,255,0.6); font-size:14px;">We've received your submission. Your startup will be live on Dealflow Scout within 24 hours.</p>
         </div>
-        <div class="form-field">
-          <label class="form-label">Founder email</label>
-          <input class="form-input" type="email" placeholder="you@yourcompany.com">
-        </div>
-        <button class="form-submit">Submit my startup →</button>
       </div>
     </div>
   </div>
@@ -508,5 +515,6 @@ document.querySelectorAll('.founder-feat-card, .signal-item').forEach(el => {
   io.observe(el);
 });
 </script>
+<script src="app.js"></script>
 </body>
 </html>

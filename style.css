@@ -129,12 +129,13 @@ button { cursor: pointer; font-family: 'Inter', sans-serif; }
   outline: none; min-width: 0;
 }
 .hero-form input::placeholder { color: #aaa; }
-.hero-form button {
+.hero-form button, .hero-form a.btn-hero-cta {
   flex-shrink: 0; padding: 10px 22px; background: var(--blue-dark); color: #fff;
   font-size: 14px; font-weight: 600; border: none; border-radius: 100px;
   cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.15s; white-space: nowrap;
+  text-decoration: none; display: inline-flex; align-items: center;
 }
-.hero-form button:hover { opacity: 0.85; }
+.hero-form button:hover, .hero-form a.btn-hero-cta:hover { opacity: 0.85; }
 
 /* ─── TRUSTED BY ─── */
 .trusted { background: var(--hero-bg); padding: 40px 0 72px; border-top: 1px solid rgba(29,78,216,0.07); }
