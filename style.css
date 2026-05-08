@@ -458,3 +458,33 @@ footer { background: var(--blue-nav); padding: 64px 0 32px; }
 }
 .modal-submit:hover { opacity: 0.85; }
 .modal-submit:disabled { opacity: 0.5; cursor: default; }
+
+/* ─── NAV SCROLL STATE ─── */
+.nav.scrolled {
+  box-shadow: 0 1px 20px rgba(0,0,0,0.09);
+  background: rgba(238,238,242,0.97);
+}
+
+/* ─── SCROLL REVEAL ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── MARQUEE LOGO ROW ─── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.logo-row { overflow: hidden; position: relative; }
+.logo-track {
+  display: flex; align-items: center; gap: 56px;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.logo-row:hover .logo-track { animation-play-state: paused; }
