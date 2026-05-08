@@ -368,24 +368,18 @@ section.section { padding: 80px 0; }
 .btn-blue:hover { opacity: 0.85; }
 
 /* ─── FOOTER ─── */
-footer { background: var(--blue-nav); padding: 64px 0 32px; }
-.footer-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 48px; margin-bottom: 56px; }
-.footer-brand-logo { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
-.footer-brand-name { font-size: 15px; font-weight: 700; color: #fff; }
-.footer-brand-desc { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.65; max-width: 240px; margin-bottom: 24px; }
-.footer-certs { display: flex; gap: 10px; }
-.footer-cert { padding: 5px 10px; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35); white-space: nowrap; }
-.footer-col h5 { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 16px; }
-.footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,0.45); margin-bottom: 10px; transition: color 0.15s; }
-.footer-col a:hover { color: rgba(255,255,255,0.85); }
-.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.08); }
+footer { background: var(--blue-nav); padding: 48px 0 32px; }
+.footer-main { display: flex; align-items: center; justify-content: space-between; gap: 40px; margin-bottom: 32px; flex-wrap: wrap; }
+.footer-brand-col { max-width: 440px; }
+.footer-brand-name { font-size: 15px; font-weight: 700; color: #fff; display: block; margin-bottom: 10px; }
+.footer-brand-desc { font-size: 14px; color: rgba(255,255,255,0.4); line-height: 1.65; margin: 0; }
+.footer-certs { display: flex; gap: 10px; flex-shrink: 0; }
+.footer-cert { padding: 6px 12px; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); white-space: nowrap; }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 12px; }
 .footer-copy { font-size: 13px; color: rgba(255,255,255,0.25); }
 .footer-legal { display: flex; gap: 20px; }
 .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.28); transition: color 0.15s; }
 .footer-legal a:hover { color: rgba(255,255,255,0.6); }
-
-/* footer logo bricks white */
-.footer-brick span { background: rgba(255,255,255,0.85); }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1024px) {
