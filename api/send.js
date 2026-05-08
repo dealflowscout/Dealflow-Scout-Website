@@ -14,19 +14,27 @@ export default async function handler(req, res) {
   let subject, html;
 
   if (body.type === 'demo') {
-    subject = `New Demo Request — ${body.email}`;
+    subject = `New Demo Request — ${body.name || body.email}`;
     html = `
       <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;">
         <h2 style="color:#0a1f4e;margin-bottom:8px;">New Demo Request</h2>
-        <p style="color:#666;margin-top:0;">Someone booked a demo via the Dealflow Scout website.</p>
+        <p style="color:#666;margin-top:0;">Someone requested a demo via the Dealflow Scout website.</p>
         <table style="width:100%;border-collapse:collapse;margin-top:24px;">
           <tr style="border-bottom:1px solid #eee;">
-            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;width:140px;">Email</td>
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;width:140px;">Name</td>
+            <td style="padding:12px 0;color:#333;">${body.name || '—'}</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Email</td>
             <td style="padding:12px 0;color:#333;">${body.email}</td>
           </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Firm</td>
+            <td style="padding:12px 0;color:#333;">${body.firm || '—'}</td>
+          </tr>
           <tr>
-            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Source</td>
-            <td style="padding:12px 0;color:#333;">${body.source || 'Website'}</td>
+            <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Message</td>
+            <td style="padding:12px 0;color:#333;">${body.message || '—'}</td>
           </tr>
         </table>
       </div>

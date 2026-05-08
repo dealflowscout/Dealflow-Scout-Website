@@ -404,3 +404,57 @@ footer { background: var(--blue-nav); padding: 64px 0 32px; }
   .hero-form button { width: 100%; justify-content: center; }
   .cta-form { flex-direction: column; }
 }
+
+/* ─── DEMO MODAL ─── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(10,13,26,0.55);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+  padding: 16px;
+}
+.modal-overlay.is-open { opacity: 1; pointer-events: auto; }
+.modal-card {
+  background: #fff; border-radius: 20px;
+  width: 480px; max-width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  position: relative;
+  transform: translateY(20px); transition: transform 0.22s;
+}
+.modal-overlay.is-open .modal-card { transform: translateY(0); }
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg-mid); border: none; cursor: pointer;
+  font-size: 18px; color: var(--muted); line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; z-index: 1;
+}
+.modal-close:hover { background: #e5e7eb; color: var(--ink); }
+.modal-body { padding: 36px 36px 32px; }
+.modal-icon { font-size: 30px; margin-bottom: 10px; }
+.modal-title { font-size: 24px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; margin-bottom: 6px; }
+.modal-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
+.modal-field { margin-bottom: 13px; }
+.modal-label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 5px; letter-spacing: 0.03em; }
+.modal-input {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 14px; font-family: 'Inter', sans-serif; color: var(--ink);
+  background: var(--bg); outline: none;
+  transition: border-color 0.15s; box-sizing: border-box;
+}
+.modal-input:focus { border-color: var(--blue); }
+.modal-textarea { resize: vertical; min-height: 78px; }
+.modal-submit {
+  width: 100%; padding: 13px; margin-top: 6px;
+  background: var(--blue-dark); color: #fff;
+  font-size: 15px; font-weight: 700; border: none; border-radius: 100px;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: opacity 0.15s;
+}
+.modal-submit:hover { opacity: 0.85; }
+.modal-submit:disabled { opacity: 0.5; cursor: default; }

@@ -214,30 +214,16 @@
       </div>
       <span class="nav-logo-text">Dealflow Scout</span>
     </a>
-    <div class="nav-menu">
-      <div class="nav-dropdown">
-        <a href="#" class="nav-link">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
-        <div class="dropdown-menu">
-          <a href="#" class="dropdown-item">Venture Capital</a>
-          <a href="#" class="dropdown-item">Growth Capital</a>
-          <a href="#" class="dropdown-item">Corporate Development</a>
-          <a href="#" class="dropdown-item">GTM</a>
-        </div>
-      </div>
+        <div class="nav-menu">
       <a href="customer-stories.html" class="nav-link">Customer stories</a>
       <a href="for-founders.html" class="nav-link">For founders</a>
       <a href="pricing.html" class="nav-link active">Pricing</a>
-      <div class="nav-dropdown">
-        <a href="#" class="nav-link">Company <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
-        <div class="dropdown-menu">
-          <a href="about.html" class="dropdown-item">About</a>
-          <a href="careers.html" class="dropdown-item">Careers</a>
-        </div>
-      </div>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="careers.html" class="nav-link">Careers</a>
     </div>
     <div class="nav-actions">
       <a href="https://deal-flow-scout-one.vercel.app/login" target="_blank" class="btn-nav-login">Login</a>
-      <a href="https://calendly.com/d/ct7j-wbh-rrn/dealflow-scout-by-ssanz-demo-call?month=2026-05" target="_blank" class="btn-nav-demo">Book a demo</a>
+      <a href="#" class="btn-nav-demo js-open-demo">Book a demo</a>
     </div>
   </div>
 </nav>
@@ -265,7 +251,7 @@
           <span class="pricing-period">/month</span>
         </div>
         <p class="pricing-desc">Perfect for solo GPs, angels, and small teams getting started with data-driven deal sourcing.</p>
-        <a href="https://calendly.com/d/ct7j-wbh-rrn/dealflow-scout-by-ssanz-demo-call?month=2026-05" target="_blank" class="pricing-cta secondary">Book a demo</a>
+        <a href="#" class="pricing-cta secondary js-open-demo">Book a demo</a>
         <hr class="pricing-divider">
         <div class="pricing-features-label">What's included</div>
         <ul class="pricing-features">
@@ -289,7 +275,7 @@
           <span class="pricing-period">/month</span>
         </div>
         <p class="pricing-desc">For established VC teams serious about sourcing edge. Full Scout AI, integrations, and team collaboration.</p>
-        <a href="https://calendly.com/d/ct7j-wbh-rrn/dealflow-scout-by-ssanz-demo-call?month=2026-05" target="_blank" class="pricing-cta primary">Book a demo</a>
+        <a href="#" class="pricing-cta primary js-open-demo">Book a demo</a>
         <hr class="pricing-divider">
         <div class="pricing-features-label">Everything in Starter, plus</div>
         <ul class="pricing-features">
@@ -312,7 +298,7 @@
         <div class="pricing-name">Enterprise</div>
         <div class="pricing-custom-price">Custom</div>
         <p style="font-size:13px; color:var(--muted); margin-bottom:28px; margin-top:6px;">Tailored to your fund's size, strategy, and data infrastructure needs.</p>
-        <a href="https://calendly.com/d/ct7j-wbh-rrn/dealflow-scout-by-ssanz-demo-call?month=2026-05" target="_blank" class="pricing-cta secondary">Contact sales</a>
+        <a href="#" class="pricing-cta secondary js-open-demo">Contact sales</a>
         <hr class="pricing-divider">
         <div class="pricing-features-label">Everything in Growth, plus</div>
         <ul class="pricing-features">
@@ -435,7 +421,7 @@
     <p class="section-sub">Join 500+ VC firms already using Dealflow Scout to source smarter.</p>
     <div class="cta-form">
       <input type="email" placeholder="Email address">
-      <a href="https://calendly.com/d/ct7j-wbh-rrn/dealflow-scout-by-ssanz-demo-call?month=2026-05" target="_blank" class="btn-blue">Book a demo <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      <a href="#" class="btn-blue js-open-demo">Book a demo <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
     </div>
   </div>
 </section>
@@ -497,6 +483,43 @@ document.querySelectorAll('.pricing-card').forEach(el => {
   io.observe(el);
 });
 </script>
+
+<!-- DEMO MODAL -->
+<div class="modal-overlay" id="demoModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-body">
+      <div class="modal-icon">&#128197;</div>
+      <h2 class="modal-title">Book a demo</h2>
+      <p class="modal-sub">Tell us about your firm and we'll set up a personalized walkthrough.</p>
+      <form id="demoModalForm" novalidate>
+        <div class="modal-field">
+          <label class="modal-label">Full name</label>
+          <input class="modal-input" type="text" name="name" placeholder="Jane Smith" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Work email</label>
+          <input class="modal-input" type="email" name="email" placeholder="jane@fund.vc" required>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Firm / Fund name</label>
+          <input class="modal-input" type="text" name="firm" placeholder="Acme Ventures">
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">Message <span style="font-weight:400;opacity:0.55;">(optional)</span></label>
+          <textarea class="modal-input modal-textarea" name="message" placeholder="Tell us about your deal flow challenges..."></textarea>
+        </div>
+        <button type="submit" class="modal-submit" id="demoModalSubmit">Request a demo &rarr;</button>
+      </form>
+      <div id="demoModalSuccess" style="display:none; text-align:center; padding:20px 0 4px;">
+        <div style="font-size:40px; margin-bottom:12px;">&#127881;</div>
+        <h3 style="font-size:20px; font-weight:700; color:var(--ink); margin-bottom:8px;">Request received!</h3>
+        <p style="color:var(--muted); font-size:14px; line-height:1.6;">We'll reach out within 24 hours with a calendar invite. Looking forward to it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
