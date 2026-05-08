@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Dealflow Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ─── ABOUT PAGE SPECIFIC ─── */
+.mission-section { background: var(--bg); padding: 80px 0; border-top: 1px solid var(--border); }
+.mission-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.mission-text h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; color: var(--ink); letter-spacing: -1.2px; line-height: 1.12; margin-bottom: 20px; }
+.mission-text p { font-size: 16px; color: var(--muted); line-height: 1.75; margin-bottom: 16px; }
+.mission-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.mission-stat { padding: 24px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.mission-stat-num { font-size: 36px; font-weight: 800; color: var(--ink); letter-spacing: -1.5px; line-height: 1; margin-bottom: 6px; }
+.mission-stat-label { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* Values */
+.values-section { background: var(--bg-soft); padding: 80px 0; border-top: 1px solid var(--border); }
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.value-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.value-card:hover { box-shadow: var(--shadow); border-color: #d1d5db; }
+.value-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.value-card h3 { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; margin-bottom: 12px; }
+.value-card p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+/* Team */
+.team-section { background: var(--bg); padding: 80px 0; border-top: 1px solid var(--border); }
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
+.team-card {
+  text-align: center;
+  padding: 28px 20px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.team-card:hover { box-shadow: var(--shadow); border-color: #d1d5db; }
+.team-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+.team-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.team-role { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.team-prev { display: inline-block; padding: 2px 8px; background: var(--bg-mid); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; font-weight: 600; color: var(--muted); }
+
+/* Stats bar */
+.stats-section { background: var(--blue-nav); padding: 64px 0; position: relative; overflow: hidden; }
+.stats-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; position: relative; z-index: 1; text-align: center; }
+.stat-block { }
+.stat-number { font-size: clamp(36px, 5vw, 56px); font-weight: 800; color: #fff; letter-spacing: -2px; line-height: 1; margin-bottom: 8px; }
+.stat-label { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+/* Investors in us */
+.backed-section { background: var(--bg-soft); padding: 64px 0; border-top: 1px solid var(--border); text-align: center; }
+.backed-logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 28px; }
+
+/* Press */
+.press-section { background: var(--bg); padding: 72px 0; border-top: 1px solid var(--border); }
+.press-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+.press-card {
+  padding: 24px 28px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.press-outlet { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.press-headline { font-size: 15px; font-weight: 600; color: var(--ink); line-height: 1.5; margin-bottom: 10px; }
+.press-link { font-size: 13px; font-weight: 500; color: var(--blue-dark); display: inline-flex; align-items: center; gap: 4px; transition: gap 0.2s; }
+.press-link:hover { gap: 8px; }
+
+@media (max-width: 1024px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .mission-wrap { grid-template-columns: 1fr; }
+  .values-grid, .press-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-mark">
+        <div class="brick-icon"><span></span><span></span><span></span><span></span></div>
+      </div>
+      <span class="nav-logo-text">Dealflow Scout</span>
+    </a>
+    <div class="nav-menu">
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item">Venture Capital</a>
+          <a href="#" class="dropdown-item">Growth Capital</a>
+          <a href="#" class="dropdown-item">Corporate Development</a>
+          <a href="#" class="dropdown-item">GTM</a>
+        </div>
+      </div>
+      <a href="customer-stories.html" class="nav-link">Customer stories</a>
+      <a href="for-founders.html" class="nav-link">For founders</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link active">Company <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="about.html" class="dropdown-item">About</a>
+          <a href="careers.html" class="dropdown-item">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn-nav-login">Login</a>
+      <button class="btn-nav-demo">Book a demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding: 80px 0 64px;">
+  <div class="container">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Founded 2022 · San Francisco</div>
+    <h1 class="hero-h1" style="font-size: clamp(36px, 5.5vw, 72px); letter-spacing: -2px;">We're building the intelligence<br>layer for venture</h1>
+    <p class="hero-sub">Dealflow Scout gives investors a structural edge. We believe the best deals should go to the best investors — not just the best-networked ones.</p>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission-section">
+  <div class="container">
+    <div class="mission-wrap">
+      <div class="mission-text">
+        <span class="section-tag">Our mission</span>
+        <h2>Making venture capital a level playing field</h2>
+        <p>The venture capital industry has always run on relationships and pattern matching. For decades, the best deals went to the firms with the deepest networks — not necessarily the ones with the sharpest thesis or the fastest research process.</p>
+        <p>We're changing that. Dealflow Scout gives any VC firm — from a $10M emerging fund to a $5B multi-stage platform — access to the same quality of signal, the same real-time intelligence, and the same AI-powered deal discovery that was once reserved for firms with armies of analysts.</p>
+        <p>The future of venture capital is data-driven, thesis-first, and open to anyone who's willing to build conviction on the right information.</p>
+      </div>
+      <div class="mission-stats">
+        <div class="mission-stat">
+          <div class="mission-stat-num">500+</div>
+          <div class="mission-stat-label">VC firms actively using Dealflow Scout</div>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-num">50K+</div>
+          <div class="mission-stat-label">Startups tracked across 7 data sources</div>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-num">7</div>
+          <div class="mission-stat-label">Live data sources updated daily</div>
+        </div>
+        <div class="mission-stat">
+          <div class="mission-stat-num">94</div>
+          <div class="mission-stat-label">Signals in our thesis match scoring model</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-block">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">VC firms &amp; investors</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">50,000+</div>
+        <div class="stat-label">Startups tracked globally</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">4M+</div>
+        <div class="stat-label">Data signals processed daily</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number">$2.1B+</div>
+        <div class="stat-label">In deals sourced via Dealflow Scout</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="container">
+    <span class="section-tag">Our values</span>
+    <h2 class="section-h2">What we believe</h2>
+    <p class="section-sub">These aren't posters on the wall. They're the principles that shape every product decision, every hire, and every customer conversation.</p>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🎯</div>
+        <h3>Signal over noise</h3>
+        <p>The venture world is drowning in data but starving for insight. We obsess over the quality and relevance of every signal we surface — because a weak signal acted on is worse than no signal at all. We'd rather show you three great companies than thirty mediocre ones.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">⚡</div>
+        <h3>Speed is alpha</h3>
+        <p>In venture, information advantage decays fast. The best investors move with conviction early — and our job is to get them there first. We build every feature with the question: "Does this help an investor act faster, with more confidence?" If the answer is no, we don't build it.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🔒</div>
+        <h3>Trust is infrastructure</h3>
+        <p>Investors share their investment thesis, portfolio data, and sourcing strategies with us. Founders trust us with their company's trajectory and future plans. We treat that trust as sacred infrastructure — something we build on, never something we exploit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="team-section">
+  <div class="container">
+    <span class="section-tag">The team</span>
+    <h2 class="section-h2">Built by people who've been on both sides of the table</h2>
+    <p class="section-sub">Our team includes former VCs, founders, data engineers, and AI researchers — all united by a shared belief that better data makes for better investing.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar" style="background: var(--blue-nav);">AJ</div>
+        <div class="team-name">Alex Johnson</div>
+        <div class="team-role">Co-founder &amp; CEO</div>
+        <span class="team-prev">ex-Sequoia · Stanford</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background: var(--blue-dark);">SR</div>
+        <div class="team-name">Sophia Reyes</div>
+        <div class="team-role">Co-founder &amp; CTO</div>
+        <span class="team-prev">ex-Palantir · MIT</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background: #1d4ed8;">MC</div>
+        <div class="team-name">Marcus Chen</div>
+        <div class="team-role">VP of Product</div>
+        <span class="team-prev">ex-Stripe · Carnegie Mellon</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background: #7c3aed;">LN</div>
+        <div class="team-name">Leila Nouri</div>
+        <div class="team-role">Head of Data Science</div>
+        <span class="team-prev">ex-OpenAI · Caltech</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background: #0369a1;">DW</div>
+        <div class="team-name">David Wu</div>
+        <div class="team-role">VP of Sales</div>
+        <span class="team-prev">ex-LinkedIn · UCLA</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background: #dc2626;">OP</div>
+        <div class="team-name">Olivia Park</div>
+        <div class="team-role">Head of Design</div>
+        <span class="team-prev">ex-Figma · RISD</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background: #065f46;">JT</div>
+        <div class="team-name">James Torres</div>
+        <div class="team-role">Head of Engineering</div>
+        <span class="team-prev">ex-Databricks · Georgia Tech</span>
+      </div>
+      <div class="team-card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; border-style: dashed;">
+        <div style="font-size:28px; margin-bottom:10px; color: var(--muted);">+</div>
+        <div class="team-name" style="color: var(--muted);">You?</div>
+        <div class="team-role">We're hiring</div>
+        <a href="careers.html" style="margin-top:10px; font-size:13px; font-weight:600; color:var(--blue-dark);">See open roles →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BACKED BY -->
+<section class="backed-section">
+  <div class="container">
+    <p class="trusted-label">Backed by</p>
+    <div class="backed-logos">
+      <span class="logo-item">Andreessen Horowitz</span>
+      <span class="logo-item">Y Combinator</span>
+      <span class="logo-item">First Round Capital</span>
+      <span class="logo-item">Pear VC</span>
+      <span class="logo-item">Sequoia Scout Fund</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRESS -->
+<section class="press-section">
+  <div class="container">
+    <span class="section-tag">Press</span>
+    <h2 class="section-h2">In the news</h2>
+    <div class="press-grid">
+      <div class="press-card">
+        <div class="press-outlet">TechCrunch</div>
+        <div class="press-headline">"Dealflow Scout is the Bloomberg Terminal of venture capital — and investors are paying attention."</div>
+        <a href="#" class="press-link">Read article <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="press-card">
+        <div class="press-outlet">Forbes</div>
+        <div class="press-headline">"How AI is finally solving venture capital's biggest problem: finding the right deal at the right time."</div>
+        <a href="#" class="press-link">Read article <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+      <div class="press-card">
+        <div class="press-outlet">The Information</div>
+        <div class="press-headline">"Dealflow Scout raises $18M Series A to build the intelligence layer powering the next generation of VC."</div>
+        <a href="#" class="press-link">Read article <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-h2">Want to work with us?</h2>
+    <p class="section-sub">We're always looking for curious, driven people. See what roles are open.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="careers.html" class="btn-blue">See open roles <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+      <button class="btn-nav-demo" style="font-size:14px;">Book a demo</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <div class="nav-logo-mark"><div class="brick-icon footer-brick"><span></span><span></span><span></span><span></span></div></div>
+          <span class="footer-brand-name">Dealflow Scout</span>
+        </div>
+        <p class="footer-brand-desc">AI-powered deal sourcing for VC firms. Automatically discovers, scores, and tracks early-stage startups.</p>
+        <div class="footer-certs">
+          <span class="footer-cert">SOC 2 Type II</span>
+          <span class="footer-cert">ISO 27001</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="about.html">About Us</a>
+        <a href="careers.html">Careers</a>
+        <a href="about.html">Team</a>
+        <a href="for-founders.html">Submit your startup</a>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <a href="pricing.html">Pricing</a>
+        <a href="#">Blog</a>
+        <a href="#">API documentation</a>
+        <a href="#">Support</a>
+      </div>
+      <div class="footer-col">
+        <h5>Case Studies</h5>
+        <a href="customer-stories.html">Valo Ventures</a>
+        <a href="customer-stories.html">Bedrock</a>
+        <a href="customer-stories.html">MVP Ventures</a>
+        <a href="customer-stories.html">Ridge Ventures</a>
+        <a href="customer-stories.html">View all →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">All rights reserved © 2026 Dealflow Scout</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.value-card, .team-card, .mission-stat, .press-card').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(20px)'; el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>

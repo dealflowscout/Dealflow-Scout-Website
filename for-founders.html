@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Founders — Dealflow Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ─── FOR FOUNDERS PAGE SPECIFIC ─── */
+.founder-features { background: var(--bg); padding: 80px 0; border-top: 1px solid var(--border); }
+.founder-features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.founder-feat-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.founder-feat-card:hover { box-shadow: var(--shadow); border-color: #d1d5db; }
+.founder-feat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+.founder-feat-card h3 { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; margin-bottom: 10px; }
+.founder-feat-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* Signals section */
+.signals-section { background: var(--bg-soft); padding: 80px 0; border-top: 1px solid var(--border); }
+.signals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 48px; }
+.signal-list { display: flex; flex-direction: column; gap: 12px; }
+.signal-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.signal-item:hover { border-color: var(--blue-border); box-shadow: var(--shadow-sm); }
+.signal-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.signal-label { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.signal-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.signal-score-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.signal-score-header {
+  background: var(--bg-soft);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.signal-score-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+.signal-score-body { padding: 20px 18px; }
+.score-meter { margin-bottom: 20px; }
+.score-meter-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.score-meter-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+.score-meter-val { font-size: 12px; font-weight: 700; color: var(--blue-dark); }
+.score-bar { height: 6px; background: var(--bg-mid); border-radius: 100px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--blue), var(--blue-dark)); }
+.score-overall {
+  text-align: center;
+  padding: 16px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  border-radius: var(--radius);
+  margin-top: 4px;
+}
+.score-overall-num { font-size: 40px; font-weight: 800; color: var(--blue-dark); letter-spacing: -2px; line-height: 1; }
+.score-overall-label { font-size: 12px; color: var(--blue); font-weight: 600; margin-top: 4px; }
+
+/* How to submit */
+.submit-section { background: var(--bg); padding: 80px 0; border-top: 1px solid var(--border); }
+.submit-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+.submit-step { text-align: center; padding: 32px 24px; }
+.submit-step-num {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--blue-dim);
+  border: 2px solid var(--blue-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--blue-dark);
+  margin: 0 auto 16px;
+}
+.submit-step h3 { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+.submit-step p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* Submit form */
+.submit-form-section { background: var(--blue-nav); padding: 80px 0; position: relative; overflow: hidden; }
+.submit-form-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.submit-form-wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.submit-form-text h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; color: #fff; letter-spacing: -1.2px; line-height: 1.12; margin-bottom: 16px; }
+.submit-form-text p { font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+.submit-form-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+.form-field { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 6px; letter-spacing: 0.04em; }
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input::placeholder { color: rgba(255,255,255,0.25); }
+.form-input:focus { border-color: rgba(147,197,253,0.5); }
+.form-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: rgba(255,255,255,0.7);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-submit { width: 100%; padding: 12px; background: #fff; color: var(--blue-dark); font-size: 15px; font-weight: 700; border: none; border-radius: 100px; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.15s; margin-top: 8px; }
+.form-submit:hover { opacity: 0.9; }
+
+@media (max-width: 768px) {
+  .founder-features-grid, .submit-steps { grid-template-columns: 1fr; }
+  .signals-grid, .submit-form-wrap { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-mark">
+        <div class="brick-icon"><span></span><span></span><span></span><span></span></div>
+      </div>
+      <span class="nav-logo-text">Dealflow Scout</span>
+    </a>
+    <div class="nav-menu">
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item">Venture Capital</a>
+          <a href="#" class="dropdown-item">Growth Capital</a>
+          <a href="#" class="dropdown-item">Corporate Development</a>
+          <a href="#" class="dropdown-item">GTM</a>
+        </div>
+      </div>
+      <a href="customer-stories.html" class="nav-link">Customer stories</a>
+      <a href="for-founders.html" class="nav-link active">For founders</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Company <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="about.html" class="dropdown-item">About</a>
+          <a href="careers.html" class="dropdown-item">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn-nav-login">Login</a>
+      <button class="btn-nav-demo">Book a demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding: 80px 0 64px;">
+  <div class="container">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>50,000+ startups tracked · 500+ active VC investors</div>
+    <h1 class="hero-h1" style="font-size: clamp(40px, 6vw, 80px); letter-spacing: -2.5px;">Get discovered by<br>the right investors</h1>
+    <p class="hero-sub">Dealflow Scout is how the world's best VC firms find startups like yours. Submit your company and get in front of investors actively looking for what you're building.</p>
+    <div class="hero-form">
+      <input type="text" placeholder="Your startup name or website">
+      <button type="submit">Submit your startup</button>
+    </div>
+  </div>
+</section>
+
+<!-- TRUSTED INVESTORS -->
+<section class="trusted">
+  <div class="container">
+    <p class="trusted-label">Investors actively using Dealflow Scout</p>
+    <div class="logo-row">
+      <span class="logo-item">Sequoia</span>
+      <span class="logo-item">Andreessen Horowitz</span>
+      <span class="logo-item">Lightspeed</span>
+      <span class="logo-item">Khosla Ventures</span>
+      <span class="logo-item">Floodgate</span>
+      <span class="logo-item">Accel</span>
+      <span class="logo-item">Pear VC</span>
+      <span class="logo-item">First Round</span>
+      <span class="logo-item">Flybridge</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW INVESTORS FIND YOU -->
+<section class="founder-features">
+  <div class="container">
+    <span class="section-tag">How it works</span>
+    <h2 class="section-h2">How investors find startups on Dealflow Scout</h2>
+    <p class="section-sub">Investors use Scout AI to search, screen, and score companies daily. Here's how your startup gets discovered.</p>
+    <div class="founder-features-grid">
+      <div class="founder-feat-card">
+        <div class="founder-feat-icon">🔍</div>
+        <h3>Thesis-matched discovery</h3>
+        <p>Investors configure their investment thesis — sector, stage, geography, team signals — and Dealflow Scout surfaces the companies that match. If your startup fits what an investor is looking for, you appear in their daily feed, automatically.</p>
+      </div>
+      <div class="founder-feat-card">
+        <div class="founder-feat-icon">📡</div>
+        <h3>Signal-driven momentum tracking</h3>
+        <p>Our platform tracks 7 live data sources daily — including GitHub activity, job postings, product launches, and funding news. Companies showing strong momentum signals get surfaced to investors even before they're well-known.</p>
+      </div>
+      <div class="founder-feat-card">
+        <div class="founder-feat-icon">🤖</div>
+        <h3>Scout AI proactive outreach</h3>
+        <p>When an investor asks Scout AI to draft outreach, it uses your public signals to craft a personalized message. The best founders in our database receive 3–5x more investor interest than those with thin or outdated profiles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT SIGNALS MATTER -->
+<section class="signals-section">
+  <div class="container">
+    <span class="section-tag">Investor signals</span>
+    <h2 class="section-h2">What signals matter to investors</h2>
+    <p class="section-sub">Dealflow Scout's AI scoring model evaluates startups across 94 signals. Here are the ones that move the needle most.</p>
+    <div class="signals-grid">
+      <div class="signal-list">
+        <div class="signal-item">
+          <div class="signal-icon">📈</div>
+          <div>
+            <div class="signal-label">Headcount growth velocity</div>
+            <div class="signal-desc">Companies growing engineering headcount by 50%+ quarter-over-quarter score highest. Hiring signals are the single strongest predictor of momentum in our model.</div>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-icon">⚡</div>
+          <div>
+            <div class="signal-label">Product launch activity</div>
+            <div class="signal-desc">New product releases on Product Hunt, GitHub commits, and changelog activity signal an active, shipping team — a top 3 signal for early-stage investors.</div>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-icon">🎓</div>
+          <div>
+            <div class="signal-label">Founding team pedigree</div>
+            <div class="signal-desc">Prior startup exits, engineering backgrounds from top companies, and repeat founder status all significantly boost your thesis match score with tier-1 funds.</div>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-icon">💰</div>
+          <div>
+            <div class="signal-label">Funding stage &amp; raise history</div>
+            <div class="signal-desc">We track capital raised, investor names, and time between rounds. Efficient capital deployment and strong co-investors are strong credibility signals.</div>
+          </div>
+        </div>
+        <div class="signal-item">
+          <div class="signal-icon">📣</div>
+          <div>
+            <div class="signal-label">Press &amp; media mentions</div>
+            <div class="signal-desc">Coverage in TechCrunch, Bloomberg, and niche trade media generates real-time alerts for investors tracking your category. We scan GDELT and 200+ outlets daily.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="signal-score-card">
+          <div class="signal-score-header">
+            <div class="feat-mock-dot r"></div>
+            <div class="feat-mock-dot y"></div>
+            <div class="feat-mock-dot g"></div>
+            <span class="signal-score-title" style="margin-left:6px;">Thesis Match Score — Example</span>
+          </div>
+          <div class="signal-score-body">
+            <div style="font-size:13px; font-weight:700; color:var(--ink); margin-bottom:20px;">Resolve AI · AI Infrastructure · Series A</div>
+            <div class="score-meter">
+              <div class="score-meter-label"><span class="score-meter-name">Headcount growth</span><span class="score-meter-val">98/100</span></div>
+              <div class="score-bar"><div class="score-fill" style="width:98%;"></div></div>
+            </div>
+            <div class="score-meter">
+              <div class="score-meter-label"><span class="score-meter-name">Team pedigree</span><span class="score-meter-val">91/100</span></div>
+              <div class="score-bar"><div class="score-fill" style="width:91%;"></div></div>
+            </div>
+            <div class="score-meter">
+              <div class="score-meter-label"><span class="score-meter-name">Product momentum</span><span class="score-meter-val">87/100</span></div>
+              <div class="score-bar"><div class="score-fill" style="width:87%;"></div></div>
+            </div>
+            <div class="score-meter">
+              <div class="score-meter-label"><span class="score-meter-name">Sector fit</span><span class="score-meter-val">95/100</span></div>
+              <div class="score-bar"><div class="score-fill" style="width:95%;"></div></div>
+            </div>
+            <div class="score-meter">
+              <div class="score-meter-label"><span class="score-meter-name">Capital efficiency</span><span class="score-meter-val">82/100</span></div>
+              <div class="score-bar"><div class="score-fill" style="width:82%;"></div></div>
+            </div>
+            <div class="score-overall">
+              <div class="score-overall-num">94</div>
+              <div class="score-overall-label">Overall thesis match score</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 16px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--muted); line-height: 1.6;">
+          Scores are calculated daily and shown to investors whose thesis aligns with your stage, sector, and geography. A score above 80 puts you in the top 10% of companies in your category.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO SUBMIT -->
+<section class="submit-section">
+  <div class="container">
+    <span class="section-tag">Submit your startup</span>
+    <h2 class="section-h2">Three steps to get discovered</h2>
+    <p class="section-sub">Submitting your startup is free and takes less than 5 minutes. Your profile is live within 24 hours.</p>
+    <div class="submit-steps">
+      <div class="submit-step">
+        <div class="submit-step-num">1</div>
+        <h3>Submit your profile</h3>
+        <p>Share your company name, website, one-liner, stage, sector, and founding team. We'll pull in public signals from GitHub, LinkedIn, and news automatically.</p>
+      </div>
+      <div class="submit-step">
+        <div class="submit-step-num">2</div>
+        <h3>Get scored &amp; indexed</h3>
+        <p>Our AI model runs 94 signals across your company within 24 hours. Your Thesis Match Score is calculated and updated daily as new signals appear.</p>
+      </div>
+      <div class="submit-step">
+        <div class="submit-step-num">3</div>
+        <h3>Investors discover you</h3>
+        <p>Your startup surfaces in the daily feeds of investors whose thesis matches your profile. When they reach out via Dealflow Scout, you'll receive their message directly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBMIT FORM (dark) -->
+<section class="submit-form-section" id="submit">
+  <div class="container">
+    <div class="submit-form-wrap">
+      <div class="submit-form-text">
+        <span class="section-tag" style="color:#93c5fd;">Get in front of 500+ VCs</span>
+        <h2>Submit your startup today</h2>
+        <p>Free to submit. No equity taken. Your data is never sold. We just help investors find great companies — including yours.</p>
+        <div style="margin-top: 32px; display: flex; flex-direction: column; gap: 12px;">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:rgba(255,255,255,0.55);">
+            <span style="color:#93c5fd;">✓</span> Free to submit — always
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:rgba(255,255,255,0.55);">
+            <span style="color:#93c5fd;">✓</span> Live on Dealflow Scout within 24 hours
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:rgba(255,255,255,0.55);">
+            <span style="color:#93c5fd;">✓</span> No equity or obligations
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:rgba(255,255,255,0.55);">
+            <span style="color:#93c5fd;">✓</span> Seen by 500+ active VC firms
+          </div>
+        </div>
+      </div>
+      <div class="submit-form-card">
+        <div style="font-size:16px; font-weight:700; color:#fff; margin-bottom:24px;">Tell us about your startup</div>
+        <div class="form-field">
+          <label class="form-label">Company name</label>
+          <input class="form-input" type="text" placeholder="e.g. Resolve AI">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Website</label>
+          <input class="form-input" type="url" placeholder="https://yourcompany.com">
+        </div>
+        <div class="form-field">
+          <label class="form-label">One-line description</label>
+          <input class="form-input" type="text" placeholder="What does your company do?">
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="form-label">Stage</label>
+            <select class="form-select">
+              <option>Pre-seed</option>
+              <option>Seed</option>
+              <option>Series A</option>
+              <option>Series B+</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Sector</label>
+            <select class="form-select">
+              <option>AI / ML</option>
+              <option>Fintech</option>
+              <option>Climate Tech</option>
+              <option>Health Tech</option>
+              <option>SaaS / B2B</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Founder email</label>
+          <input class="form-input" type="email" placeholder="you@yourcompany.com">
+        </div>
+        <button class="form-submit">Submit my startup →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <div class="nav-logo-mark"><div class="brick-icon footer-brick"><span></span><span></span><span></span><span></span></div></div>
+          <span class="footer-brand-name">Dealflow Scout</span>
+        </div>
+        <p class="footer-brand-desc">AI-powered deal sourcing for VC firms. Automatically discovers, scores, and tracks early-stage startups.</p>
+        <div class="footer-certs">
+          <span class="footer-cert">SOC 2 Type II</span>
+          <span class="footer-cert">ISO 27001</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="about.html">About Us</a>
+        <a href="careers.html">Careers</a>
+        <a href="about.html">Team</a>
+        <a href="for-founders.html">Submit your startup</a>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <a href="pricing.html">Pricing</a>
+        <a href="#">Blog</a>
+        <a href="#">API documentation</a>
+        <a href="#">Support</a>
+      </div>
+      <div class="footer-col">
+        <h5>Case Studies</h5>
+        <a href="customer-stories.html">Valo Ventures</a>
+        <a href="customer-stories.html">Bedrock</a>
+        <a href="customer-stories.html">MVP Ventures</a>
+        <a href="customer-stories.html">Ridge Ventures</a>
+        <a href="customer-stories.html">View all →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">All rights reserved © 2026 Dealflow Scout</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.founder-feat-card, .signal-item').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(20px)'; el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>

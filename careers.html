@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Careers — Dealflow Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ─── CAREERS PAGE SPECIFIC ─── */
+.perks-section { background: var(--bg); padding: 80px 0; border-top: 1px solid var(--border); }
+.perks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.perk-card {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+}
+.perk-icon { font-size: 28px; margin-bottom: 14px; }
+.perk-card h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.perk-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* Jobs */
+.jobs-section { background: var(--bg-soft); padding: 80px 0; border-top: 1px solid var(--border); }
+.jobs-list { display: flex; flex-direction: column; gap: 12px; margin-top: 48px; }
+.job-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+.job-card:hover { box-shadow: var(--shadow); border-color: #d1d5db; }
+.job-dept {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+.job-dept::before { content: ''; display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
+.job-title { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; margin-bottom: 6px; }
+.job-desc { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 560px; }
+.job-meta { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+.job-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.job-tag svg { width: 13px; height: 13px; color: var(--subtle); }
+.job-apply {
+  padding: 10px 22px;
+  background: var(--blue-dark);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.job-apply:hover { opacity: 0.85; }
+
+/* Culture section */
+.culture-section { background: var(--bg); padding: 80px 0; border-top: 1px solid var(--border); }
+.culture-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+.culture-card {
+  padding: 32px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.culture-card h3 { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+.culture-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* No listings placeholder */
+.jobs-empty { text-align: center; padding: 64px 0; }
+.jobs-empty p { font-size: 16px; color: var(--muted); }
+
+@media (max-width: 768px) {
+  .perks-grid { grid-template-columns: 1fr; }
+  .culture-grid { grid-template-columns: 1fr; }
+  .job-card { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-mark">
+        <div class="brick-icon"><span></span><span></span><span></span><span></span></div>
+      </div>
+      <span class="nav-logo-text">Dealflow Scout</span>
+    </a>
+    <div class="nav-menu">
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Solutions <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item">Venture Capital</a>
+          <a href="#" class="dropdown-item">Growth Capital</a>
+          <a href="#" class="dropdown-item">Corporate Development</a>
+          <a href="#" class="dropdown-item">GTM</a>
+        </div>
+      </div>
+      <a href="customer-stories.html" class="nav-link">Customer stories</a>
+      <a href="for-founders.html" class="nav-link">For founders</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link active">Company <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4.5l4 4 4-4"/></svg></a>
+        <div class="dropdown-menu">
+          <a href="about.html" class="dropdown-item">About</a>
+          <a href="careers.html" class="dropdown-item">Careers</a>
+        </div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="#" class="btn-nav-login">Login</a>
+      <button class="btn-nav-demo">Book a demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding: 80px 0 64px;">
+  <div class="container">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>We're hiring · Remote-first · Series A</div>
+    <h1 class="hero-h1" style="font-size: clamp(36px, 5.5vw, 72px); letter-spacing: -2px;">Join the team building<br>the future of venture</h1>
+    <p class="hero-sub">We're a small team with big ambitions. We believe the best investing infrastructure in the world should be accessible to every fund, everywhere.</p>
+    <a href="#open-roles" class="btn-blue" style="font-size:16px; padding: 14px 28px;">See open roles <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+  </div>
+</section>
+
+<!-- PERKS -->
+<section class="perks-section">
+  <div class="container">
+    <span class="section-tag">Why Dealflow Scout</span>
+    <h2 class="section-h2">Built for people who want to do the best work of their lives</h2>
+    <p class="section-sub">We're a team of ~35 people. Everyone ships. Everyone owns something meaningful. And everyone gets to see the direct impact of what they build.</p>
+    <div class="perks-grid">
+      <div class="perk-card">
+        <div class="perk-icon">🌍</div>
+        <h3>Fully remote</h3>
+        <p>Work from anywhere. Our team spans San Francisco, New York, London, and Berlin. We have no required in-office days, ever. Async-first culture with synchronous time for the moments that matter.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">💰</div>
+        <h3>Competitive compensation</h3>
+        <p>Top-of-market salary, meaningful equity, and annual reviews tied to company performance. We benchmark against the best tech companies — because that's who we compete with for talent.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">🏥</div>
+        <h3>Full health benefits</h3>
+        <p>100% covered medical, dental, and vision for you and your dependents. Plus mental health support through Calm and Spring Health, with no cap on sessions.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">📚</div>
+        <h3>Learning budget</h3>
+        <p>$3,000/year for conferences, courses, books, or anything that makes you better at your craft. We also host weekly internal learning sessions from customers, investors, and domain experts.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">🏖️</div>
+        <h3>Unlimited PTO</h3>
+        <p>Unlimited paid time off with a 15-day minimum. We mean it: your manager will check in with you if you haven't taken time off in 90 days. Rest is part of the job.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon">🤝</div>
+        <h3>Offsites twice a year</h3>
+        <p>We bring the whole team together twice a year — always somewhere great. Past locations include Lisbon, Tulum, and Lake Tahoe. These are real work sessions mixed with real fun.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN ROLES -->
+<section class="jobs-section" id="open-roles">
+  <div class="container">
+    <span class="section-tag">Open roles</span>
+    <h2 class="section-h2">Current openings</h2>
+    <p class="section-sub">We hire for potential as much as experience. If you're passionate about building something that matters, we want to hear from you.</p>
+    <div class="jobs-list">
+
+      <div class="job-card">
+        <div>
+          <div class="job-dept">Engineering</div>
+          <div class="job-title">Senior Software Engineer, Data Platform</div>
+          <p class="job-desc">Own the infrastructure that powers real-time ingestion and processing of 4M+ data signals per day across SEC EDGAR, GitHub, Product Hunt, and more. You'll design pipelines, optimize query performance, and help us scale to 10x our current data volume.</p>
+          <div class="job-meta">
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 2"/></svg> Full-time</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.5 4 8 4 8s4-4.5 4-8c0-2.21-1.79-4-4-4z"/><circle cx="7" cy="5" r="1.5"/></svg> Remote (Global)</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h10v8H2z"/><path d="M5 3V1m4 2V1"/></svg> Posted May 2026</span>
+          </div>
+        </div>
+        <button class="job-apply">Apply now</button>
+      </div>
+
+      <div class="job-card">
+        <div>
+          <div class="job-dept">Product</div>
+          <div class="job-title">Product Designer</div>
+          <p class="job-desc">Shape the product that 500+ VC firms rely on to find their best deals. You'll own design end-to-end — from customer research and wireframes to production-ready UI — working directly with our founding team and talking to investors weekly.</p>
+          <div class="job-meta">
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 2"/></svg> Full-time</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.5 4 8 4 8s4-4.5 4-8c0-2.21-1.79-4-4-4z"/><circle cx="7" cy="5" r="1.5"/></svg> Remote (US/EU)</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h10v8H2z"/><path d="M5 3V1m4 2V1"/></svg> Posted Apr 2026</span>
+          </div>
+        </div>
+        <button class="job-apply">Apply now</button>
+      </div>
+
+      <div class="job-card">
+        <div>
+          <div class="job-dept">Sales</div>
+          <div class="job-title">Account Executive, Enterprise</div>
+          <p class="job-desc">Close and expand relationships with the world's leading VC firms and growth funds. You understand the VC world deeply, speak the language of GPs and partners, and know how to sell a product that genuinely changes how people work.</p>
+          <div class="job-meta">
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 2"/></svg> Full-time</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.5 4 8 4 8s4-4.5 4-8c0-2.21-1.79-4-4-4z"/><circle cx="7" cy="5" r="1.5"/></svg> Remote (US)</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h10v8H2z"/><path d="M5 3V1m4 2V1"/></svg> Posted May 2026</span>
+          </div>
+        </div>
+        <button class="job-apply">Apply now</button>
+      </div>
+
+      <div class="job-card">
+        <div>
+          <div class="job-dept">Data Science</div>
+          <div class="job-title">Senior ML Engineer, Thesis Scoring</div>
+          <p class="job-desc">Improve and extend the 94-signal model at the core of Dealflow Scout. You'll work on LLM fine-tuning, signal weighting, and evaluation frameworks to make our thesis match scores more accurate, explainable, and actionable for investors.</p>
+          <div class="job-meta">
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 2"/></svg> Full-time</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1C4.79 1 3 2.79 3 5c0 3.5 4 8 4 8s4-4.5 4-8c0-2.21-1.79-4-4-4z"/><circle cx="7" cy="5" r="1.5"/></svg> Remote (Global)</span>
+            <span class="job-tag"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h10v8H2z"/><path d="M5 3V1m4 2V1"/></svg> Posted Apr 2026</span>
+          </div>
+        </div>
+        <button class="job-apply">Apply now</button>
+      </div>
+
+    </div>
+
+    <!-- General app -->
+    <div style="margin-top: 32px; padding: 32px 36px; background: var(--bg); border: 1px dashed var(--border); border-radius: var(--radius-lg); display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:6px;">Don't see a role that fits?</div>
+        <div style="font-size:14px; color:var(--muted);">We're always interested in exceptional people. Send us a note and tell us what you'd build here.</div>
+      </div>
+      <button class="job-apply">Send a general application</button>
+    </div>
+  </div>
+</section>
+
+<!-- CULTURE -->
+<section class="culture-section">
+  <div class="container">
+    <span class="section-tag">How we work</span>
+    <h2 class="section-h2">Culture isn't a perk. It's how we get things done.</h2>
+    <p class="section-sub">We're small by design. Every person at Dealflow Scout owns something that matters — and has the context and autonomy to make it great.</p>
+    <div class="culture-grid">
+      <div class="culture-card">
+        <h3>Ownership over process</h3>
+        <p>We don't have product managers standing between engineers and customers. We don't have layers of approval for design decisions. If you own something, you're responsible for understanding the problem, exploring solutions, and shipping something that works. That's the whole job.</p>
+      </div>
+      <div class="culture-card">
+        <h3>Default to writing</h3>
+        <p>We're async-first, which means we write things down. Project briefs, meeting notes, decision logs — everything important is documented. We think writing is a forcing function for clear thinking, and we make space for it.</p>
+      </div>
+      <div class="culture-card">
+        <h3>Customer obsession</h3>
+        <p>Every engineer, designer, and data scientist has access to customer calls, support tickets, and usage data. We believe proximity to the customer is a competitive advantage, not just a sales responsibility.</p>
+      </div>
+      <div class="culture-card">
+        <h3>High bar, high trust</h3>
+        <p>We hire slowly and fire fast. Not because we're ruthless — but because a small team only works when every person is excellent and trustworthy. We invest heavily in each person we bring in, and we expect the same back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-h2">Ready to build something that matters?</h2>
+    <p class="section-sub">We read every application. If you're great, we'll find a way to work with you.</p>
+    <a href="#open-roles" class="btn-blue" style="font-size:15px; padding: 14px 28px;">View open roles <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7h10M7 2l5 5-5 5"/></svg></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <div class="nav-logo-mark"><div class="brick-icon footer-brick"><span></span><span></span><span></span><span></span></div></div>
+          <span class="footer-brand-name">Dealflow Scout</span>
+        </div>
+        <p class="footer-brand-desc">AI-powered deal sourcing for VC firms. Automatically discovers, scores, and tracks early-stage startups.</p>
+        <div class="footer-certs">
+          <span class="footer-cert">SOC 2 Type II</span>
+          <span class="footer-cert">ISO 27001</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="about.html">About Us</a>
+        <a href="careers.html">Careers</a>
+        <a href="about.html">Team</a>
+        <a href="for-founders.html">Submit your startup</a>
+      </div>
+      <div class="footer-col">
+        <h5>Resources</h5>
+        <a href="pricing.html">Pricing</a>
+        <a href="#">Blog</a>
+        <a href="#">API documentation</a>
+        <a href="#">Support</a>
+      </div>
+      <div class="footer-col">
+        <h5>Case Studies</h5>
+        <a href="customer-stories.html">Valo Ventures</a>
+        <a href="customer-stories.html">Bedrock</a>
+        <a href="customer-stories.html">MVP Ventures</a>
+        <a href="customer-stories.html">Ridge Ventures</a>
+        <a href="customer-stories.html">View all →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">All rights reserved © 2026 Dealflow Scout</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.perk-card, .job-card, .culture-card').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(20px)'; el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>
