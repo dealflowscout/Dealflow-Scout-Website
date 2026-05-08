@@ -9,7 +9,10 @@ export default async function handler(req, res) {
   const body = req.body;
   const apiKey = process.env.RESEND_API_KEY;
 
-  if (!apiKey) return res.status(500).json({ error: 'Server misconfiguration' });
+  console.log('API key present:', !!apiKey);
+  console.log('Request body type:', body?.type);
+
+  if (!apiKey) return res.status(500).json({ error: 'Missing RESEND_API_KEY' });
 
   let subject, html;
 
@@ -52,7 +55,7 @@ export default async function handler(req, res) {
           </tr>
           <tr style="border-bottom:1px solid #eee;">
             <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Website</td>
-            <td style="padding:12px 0;color:#333;">${body.website ? `<a href="${body.website}">${body.website}</a>` : '—'}</td>
+            <td style="padding:12px 0;color:#333;">${body.website || '—'}</td>
           </tr>
           <tr style="border-bottom:1px solid #eee;">
             <td style="padding:12px 0;font-weight:600;color:#0a1f4e;">Description</td>
@@ -93,10 +96,16 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    if (!response.ok) return res.status(500).json({ error: data.message || 'Failed to send' });
+    console.log('Resend response status:', response.status);
+    console.log('Resend response body:', JSON.stringify(data));
+
+    if (!response.ok) {
+      return res.status(500).json({ error: data.message || data.name || 'Resend rejected the request' });
+    }
 
     return res.status(200).json({ success: true });
   } catch (err) {
+    console.log('Fetch error:', err.message);
     return res.status(500).json({ error: err.message });
   }
 }

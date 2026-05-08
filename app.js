@@ -111,23 +111,25 @@ if (modalForm) {
     modalSubmit.textContent = 'Sending…';
     modalSubmit.disabled = true;
 
-    submitForm(
-      {
-        _subject: 'New Demo Request — ' + name,
-        Name: name,
-        Email: email,
-        Firm: firm || '—',
-        Message: message || '—',
-      },
-      function() {
-        modalForm.style.display = 'none';
-        if (modalSuccess) modalSuccess.style.display = 'block';
-      },
-      function() {
+    fetch('/api/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'demo', name: name, email: email, firm: firm, message: message }),
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          modalForm.style.display = 'none';
+          if (modalSuccess) modalSuccess.style.display = 'block';
+        } else {
+          modalSubmit.textContent = 'Try again';
+          modalSubmit.disabled = false;
+        }
+      })
+      .catch(function() {
         modalSubmit.textContent = 'Try again';
         modalSubmit.disabled = false;
-      }
-    );
+      });
   });
 }
 
@@ -187,25 +189,25 @@ if (founderModalForm) {
     founderModalSubmit.textContent = 'Submitting…';
     founderModalSubmit.disabled = true;
 
-    submitForm(
-      {
-        _subject: 'New Startup Submission — ' + company,
-        Company: company,
-        Website: website || '—',
-        Description: description || '—',
-        Stage: stage || '—',
-        Sector: sector || '—',
-        'Founder Email': email,
-      },
-      function() {
-        founderModalForm.style.display = 'none';
-        if (founderModalSuccess) founderModalSuccess.style.display = 'block';
-      },
-      function() {
+    fetch('/api/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'founder', company: company, website: website, description: description, stage: stage, sector: sector, email: email }),
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          founderModalForm.style.display = 'none';
+          if (founderModalSuccess) founderModalSuccess.style.display = 'block';
+        } else {
+          founderModalSubmit.textContent = 'Try again';
+          founderModalSubmit.disabled = false;
+        }
+      })
+      .catch(function() {
         founderModalSubmit.textContent = 'Try again';
         founderModalSubmit.disabled = false;
-      }
-    );
+      });
   });
 }
 
@@ -234,23 +236,22 @@ if (founderForm) {
       founderSubmitBtn.disabled = true;
     }
 
-    submitForm(
-      {
-        _subject: 'New Startup Submission — ' + company,
-        Company: company,
-        Website: website || '—',
-        Description: description || '—',
-        Stage: stage || '—',
-        Sector: sector || '—',
-        'Founder Email': email,
-      },
-      function() {
-        founderForm.style.display = 'none';
-        if (founderSuccess) founderSuccess.style.display = 'block';
-      },
-      function() {
+    fetch('/api/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'founder', company: company, website: website, description: description, stage: stage, sector: sector, email: email }),
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          founderForm.style.display = 'none';
+          if (founderSuccess) founderSuccess.style.display = 'block';
+        } else {
+          if (founderSubmitBtn) { founderSubmitBtn.textContent = 'Try again'; founderSubmitBtn.disabled = false; }
+        }
+      })
+      .catch(function() {
         if (founderSubmitBtn) { founderSubmitBtn.textContent = 'Try again'; founderSubmitBtn.disabled = false; }
-      }
-    );
+      });
   });
 }
